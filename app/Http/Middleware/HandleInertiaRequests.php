@@ -35,9 +35,44 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
-            //
-        ];
+
+        return array_merge(parent::share($request), [
+
+            // Utilisateur connecté + ses permissions
+            'auth' => [
+                'user' => $request->user() ? [
+                    'id'     => $request->user()->id,
+                    'name'   => $request->user()->name,
+                    'email'  => $request->user()->email,
+                    'role'   => $request->user()->role,
+                    'theme'  => $request->user()->theme,
+                    'avatar' => $request->user()->profile_photo_url,
+                    // Permissions déduites du rôle 
+                    'can' => [
+                        'manage_projects' => in_array($request->user()->role, ['admin', 'project_manager']),
+                        'manage_users'    => $request->user()->role === 'admin',
+                        'view_reports'    => in_array($request->user()->role, ['admin', 'project_manager']),
+                    ],
+                ] : null,
+            ],
+
+            // Thème actif (light | dark) — utilisé dans app.blade.php
+            'theme' => $request->user()?->theme ?? 'light',
+
+            // Messages flash (succès, erreur, info)
+            // Usage dans Vue: const { flash } = usePage().props
+            'flash' => [
+                'success' => fn() => $request->session()->get('success'),
+                'error'   => fn() => $request->session()->get('error'),
+                'info'    => fn() => $request->session()->get('info'),
+            ],
+        ]);
     }
+    // return [
+    //     ...parent::share($request),
+    //     'auth' => [
+    //         'user' => $request->user(),
+    //     ],
+    //     'theme' => $request->user()?->theme ?? 'light',
+    // ];
 }

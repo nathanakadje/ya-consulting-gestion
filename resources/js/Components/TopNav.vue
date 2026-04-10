@@ -5,8 +5,8 @@
         :class="[
             'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group relative',
             isActive
-                ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-semibold shadow-sm'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/60',
+                ? 'bg-primary-50 text-primary-600 font-semibold shadow-sm'
+                : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50',
             collapsed ? 'justify-center' : '',
         ]"
     >
@@ -15,8 +15,8 @@
             :class="[
                 'material-symbols-outlined text-[22px] flex-shrink-0 transition-all',
                 isActive
-                    ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300',
+                    ? 'text-primary-600'
+                    : 'text-gray-400 group-hover:text-gray-600',
             ]"
             :style="isActive ? 'font-variation-settings: \'FILL\' 1' : ''"
         >
@@ -40,12 +40,12 @@
         <!-- Tooltip quand collapsed -->
         <div
             v-if="collapsed"
-            class="absolute left-full ml-3 px-3 py-1.5 bg-gray-900 dark:bg-gray-700 text-white text-xs font-medium rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-50"
+            class="absolute left-full ml-3 px-3 py-1.5 bg-gray-900 text-white text-xs font-medium rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-50"
         >
             {{ item.label }}
             <!-- Flèche -->
             <div
-                class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-gray-700"
+                class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"
             ></div>
         </div>
     </Link>

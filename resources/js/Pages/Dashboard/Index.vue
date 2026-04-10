@@ -7,16 +7,16 @@
         <div class="flex items-start justify-between mb-8">
             <div>
                 <h3
-                    class="font-headline text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight"
+                    class="font-headline text-2xl font-extrabold text-gray-900 tracking-tight"
                 >
                     Bonjour, {{ firstName }}
                 </h3>
-                <p class="text-gray-500 dark:text-gray-400 mt-1 text-sm">
+                <p class="text-gray-500 mt-1 text-sm">
                     Voici un résumé de l'activité de Ya Consulting.
                 </p>
             </div>
             <span
-                class="text-sm text-gray-400 dark:text-gray-500 hidden md:block"
+                class="text-sm text-gray-400 hidden md:block"
             >
                 {{ today }}
             </span>
@@ -66,19 +66,19 @@
             <!-- Derniers projets (2/3) -->
             <div class="xl:col-span-2">
                 <div
-                    class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden"
+                    class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
                 >
                     <div
-                        class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800"
+                        class="flex items-center justify-between px-6 py-4 border-b border-gray-100"
                     >
                         <h4
-                            class="font-headline font-bold text-gray-900 dark:text-white"
+                            class="font-headline font-bold text-gray-900"
                         >
                             Projets récents
                         </h4>
                         <Link
                             href="/projects"
-                            class="text-xs text-primary-600 dark:text-primary-400 font-semibold hover:underline flex items-center gap-1"
+                            class="text-xs text-primary-600 font-semibold hover:underline flex items-center gap-1"
                         >
                             Voir tous
                             <span class="material-symbols-outlined text-[14px]"
@@ -87,19 +87,19 @@
                         </Link>
                     </div>
 
-                    <div class="divide-y divide-gray-50 dark:divide-gray-800">
+                    <div class="divide-y divide-gray-50">
                         <div
                             v-for="project in recentProjects"
                             :key="project.id"
-                            class="flex items-center gap-4 px-6 py-4 hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors cursor-pointer group"
+                            class="flex items-center gap-4 px-6 py-4 hover:bg-gray-50/50 transition-colors cursor-pointer group"
                             @click="$inertia.visit('/projects/' + project.id)"
                         >
                             <!-- Icône projet -->
                             <div
-                                class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0"
+                                class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0"
                             >
                                 <span
-                                    class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-[20px]"
+                                    class="material-symbols-outlined text-primary-600 text-[20px]"
                                     >folder_open</span
                                 >
                             </div>
@@ -107,7 +107,7 @@
                             <!-- Info projet -->
                             <div class="flex-1 min-w-0">
                                 <p
-                                    class="font-semibold text-gray-900 dark:text-white text-sm truncate"
+                                    class="font-semibold text-gray-900 text-sm truncate"
                                 >
                                     {{ project.name }}
                                 </p>
@@ -124,7 +124,7 @@
                                     >{{ project.budget_used_percent }}%</span
                                 >
                                 <div
-                                    class="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden"
+                                    class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden"
                                 >
                                     <div
                                         class="h-full rounded-full transition-all"
@@ -152,7 +152,7 @@
 
                             <!-- Flèche hover -->
                             <span
-                                class="material-symbols-outlined text-gray-300 dark:text-gray-700 text-[18px] opacity-0 group-hover:opacity-100 transition-opacity"
+                                class="material-symbols-outlined text-gray-300 text-[18px] opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                                 chevron_right
                             </span>
@@ -187,25 +187,25 @@
             <!-- Dépenses récentes (1/3) -->
             <div>
                 <div
-                    class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden"
+                    class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
                 >
                     <div
-                        class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800"
+                        class="flex items-center justify-between px-6 py-4 border-b border-gray-100"
                     >
                         <h4
-                            class="font-headline font-bold text-gray-900 dark:text-white"
+                            class="font-headline font-bold text-gray-900"
                         >
                             Dernières dépenses
                         </h4>
                         <Link
                             href="/expenses"
-                            class="text-xs text-primary-600 dark:text-primary-400 font-semibold hover:underline"
+                            class="text-xs text-primary-600 font-semibold hover:underline"
                         >
                             Voir
                         </Link>
                     </div>
 
-                    <div class="divide-y divide-gray-50 dark:divide-gray-800">
+                    <div class="divide-y divide-gray-50">
                         <div
                             v-for="expense in recentExpenses"
                             :key="expense.id"
@@ -228,7 +228,7 @@
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p
-                                    class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate"
+                                    class="text-sm font-medium text-gray-800 truncate"
                                 >
                                     {{ expense.description }}
                                 </p>
@@ -237,7 +237,7 @@
                                 </p>
                             </div>
                             <span
-                                class="text-sm font-bold font-mono text-gray-900 dark:text-white whitespace-nowrap"
+                                class="text-sm font-bold font-mono text-gray-900 whitespace-nowrap"
                             >
                                 {{ formatCurrencyShort(expense.amount) }}
                             </span>
@@ -255,14 +255,14 @@
 
                     <!-- Total du mois -->
                     <div
-                        class="px-5 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center"
+                        class="px-5 py-3 bg-gray-50 border-t border-gray-100 flex justify-between items-center"
                     >
                         <span
                             class="text-xs text-gray-400 font-medium uppercase tracking-wide"
                             >Ce mois</span
                         >
                         <span
-                            class="font-headline font-bold text-primary-600 dark:text-primary-400 text-sm"
+                            class="font-headline font-bold text-primary-600 text-sm"
                         >
                             {{ formatCurrency(stats.expenses_this_month) }}
                         </span>

@@ -25,15 +25,15 @@ const props = defineProps({
 const statusMap = {
     en_cours: {
         label: "En cours",
-        class: "bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300",
+        class: "bg-primary-50 text-primary-700",
     },
     termine: {
         label: "Terminé",
-        class: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300",
+        class: "bg-emerald-50 text-emerald-700",
     },
     en_pause: {
         label: "En pause",
-        class: "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300",
+        class: "bg-amber-50 text-amber-700",
     },
 };
 

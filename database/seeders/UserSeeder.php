@@ -10,33 +10,33 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Administrateur
+        // 1. Administrateur Principal
         User::create([
-            'name'     => 'Administrateur YA',
-            'email'    => 'adminyaconsulting.ci',
+            'name' => 'Administrateur YA',
+            'email' => 'admin@yaconsulting.ci',
             'password' => Hash::make('password'),
-            'role'     => 'admin',
-            'theme'    => 'light',
+            'role' => 'admin',
+            'theme' => 'light',
             'email_verified_at' => now(),
         ]);
 
-        // Chef de projet
+        // 2. Chef de Projet
         User::create([
-            'name'     => 'Kouadio Jean',
-            'email'    => 'manageryaconsulting.ci',
+            'name' => 'Kouadio Jean',
+            'email' => 'manager@yaconsulting.ci',
             'password' => Hash::make('password'),
-            'role'     => 'project_manager',
-            'theme'    => 'light',
+            'role' => 'project_manager',
+            'theme' => 'light',
             'email_verified_at' => now(),
         ]);
 
-        // Collaborateur
+        // 3. Collaborateur (Staff)
         User::create([
-            'name'     => 'Amenan Sophie',
-            'email'    => 'staff@yaconsulting.ci',
+            'name' => 'Amenan Sophie',
+            'email' => 'staff@yaconsulting.ci',
             'password' => Hash::make('password'),
-            'role'     => 'staff_member',
-            'theme'    => 'dark',
+            'role' => 'staff_member',
+            'theme' => 'dark',
             'email_verified_at' => now(),
         ]);
     }

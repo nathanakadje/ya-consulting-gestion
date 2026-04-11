@@ -41,7 +41,7 @@ export default {
             },
             // Polices
             fontFamily: {
-                headline: ["Syne", "sans-serif"],
+                headline: ["Plus Jakarta Sans", "sans-serif"],
                 body: ["DM Sans", "sans-serif"],
                 mono: ["JetBrains Mono", "monospace"],
             },

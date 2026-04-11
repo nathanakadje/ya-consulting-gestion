@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -14,15 +15,28 @@ class UserController extends Controller
      */
     public function updateTheme(Request $request)
     {
+        // $request->validate([
+        //     'theme' => 'required|in:light,dark',
+        // ]);
+
+        // $request->user()->update([
+        //     'theme' => $request->theme,
+        // ]);
         $request->validate([
-            'theme' => 'required|in:light,dark',
+            'theme' => 'required|in:light,dark'
         ]);
 
-        $request->user()->update([
-            'theme' => $request->theme,
-        ]);
+        $user = Auth::user();
+        $user->theme = $request->theme;
+        $user->save();
 
-        // Pas de redirection — Inertia gère ça avec preserveState: true
-        return back();
+        return response()->json([
+            'success' => true,
+            'theme' => $user->theme
+        ]);
     }
+
+    // Pas de redirection — Inertia gère ça avec preserveState: true
+    //     return back();
+    // }
 }

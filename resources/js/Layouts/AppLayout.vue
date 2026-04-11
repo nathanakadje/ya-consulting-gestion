@@ -15,30 +15,84 @@ const pageTitle = computed(() => props.title);
 const pageBreadcrumb = computed(() => props.breadcrumb);
 
 // ── Thème ──────────────────────────────────────────────────
+// const isDark = ref(false);
+
+// onMounted(() => {
+//     isDark.value = document.documentElement.classList.contains("dark");
+//     document.addEventListener("click", handleOutsideClick);
+// });
+// onBeforeUnmount(() => {
+//     document.removeEventListener("click", handleOutsideClick);
+// });
+
+// function toggleTheme() {
+//     isDark.value = !isDark.value;
+//     document.documentElement.classList.toggle("dark", isDark.value);
+//     document.documentElement.style.colorScheme = isDark.value
+//         ? "dark"
+//         : "light";
+//     router.patch(
+//         "/user/theme",
+//         { theme: isDark.value ? "dark" : "light" },
+//         {
+//             preserveState: true,
+//             preserveScroll: true,
+//             onError: () => {
+//                 isDark.value = !isDark.value;
+//                 document.documentElement.classList.toggle("dark", isDark.value);
+//             },
+//         },
+//     );
+// }
 const isDark = ref(false);
 
 onMounted(() => {
-    isDark.value = document.documentElement.classList.contains("dark");
+    // Récupérer le thème depuis l'utilisateur ou localStorage
+    const userTheme = page.props.auth.user?.theme;
+    if (userTheme) {
+        isDark.value = userTheme === "dark";
+    } else {
+        isDark.value = document.documentElement.classList.contains("dark");
+    }
+
+    // Appliquer le thème
+    if (isDark.value) {
+        document.documentElement.classList.add("dark");
+    } else {
+        document.documentElement.classList.remove("dark");
+    }
+
     document.addEventListener("click", handleOutsideClick);
 });
+
 onBeforeUnmount(() => {
     document.removeEventListener("click", handleOutsideClick);
 });
 
 function toggleTheme() {
-    isDark.value = !isDark.value;
-    document.documentElement.classList.toggle("dark", isDark.value);
-    document.documentElement.style.colorScheme = isDark.value
-        ? "dark"
-        : "light";
+    const newTheme = !isDark.value;
+    isDark.value = newTheme;
+
+    // Appliquer immédiatement dans le DOM
+    if (newTheme) {
+        document.documentElement.classList.add("dark");
+        document.documentElement.style.colorScheme = "dark";
+    } else {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.style.colorScheme = "light";
+    }
+
+    // Sauvegarder en base de données
     router.patch(
         "/user/theme",
-        { theme: isDark.value ? "dark" : "light" },
+        { theme: newTheme ? "dark" : "light" },
         {
             preserveState: true,
             preserveScroll: true,
-            onError: () => {
-                isDark.value = !isDark.value;
+            onError: (error) => {
+                console.error("Erreur sauvegarde thème:", error);
+                // Annuler le changement si erreur
+                isDark.value = !newTheme;
                 document.documentElement.classList.toggle("dark", isDark.value);
             },
         },
@@ -59,9 +113,12 @@ function handleOutsideClick(e) {
 }
 
 // ── Logout via Jetstream ─────────────────────────────────────
-function logout() {
-    router.post(route("logout"));
-}
+// function logout() {
+//     router.post(route("logout"));
+// }
+const logout = () => {
+    router.post("/logout");
+};
 
 // ── Infos utilisateur ─────────────────────────────────────────
 const userInitials = computed(() => {
@@ -77,8 +134,8 @@ const userInitials = computed(() => {
 const roleLabel = computed(() => {
     const map = {
         admin: "Administrateur",
-        chef_projet: "Chef de projet",
-        collaborateur: "Collaborateur",
+        project_manager: "Chef de projet",
+        staff_member: "Collaborateur",
     };
     return map[page.props.auth.user?.role] ?? "";
 });

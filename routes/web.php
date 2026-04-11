@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use Inertia\Inertia;
 
 // Route::get('/', function () {
@@ -24,4 +25,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard/Index');
     })->name('dashboard');
+
+    Route::patch('user/theme', [UserController::class, 'updateTheme'])
+        ->name('user.theme');
 });

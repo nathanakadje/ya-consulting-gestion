@@ -30,10 +30,7 @@ class UserController extends Controller
         $user->theme = $request->theme;
         $user->save();
 
-        return response()->json([
-            'success' => true,
-            'theme' => $user->theme
-        ]);
+        return back()->with('success', 'Thème mis à jour');
     }
 
     // Pas de redirection — Inertia gère ça avec preserveState: true

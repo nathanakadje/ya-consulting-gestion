@@ -79,7 +79,7 @@ class ExpenseController extends Controller
     // ── STORE — Créer une dépense (depuis modal) ──────────
     public function store(Request $request)
     {
-        $this->authorizeRole(['admin', 'chef_projet']);
+        $this->authorizeRole(['admin', 'project_manager']);
 
         $validated = $request->validate([
             'project_id'   => 'required|exists:projects,id',
@@ -129,7 +129,7 @@ class ExpenseController extends Controller
     // ── UPDATE — Modifier une dépense ─────────────────────
     public function update(Request $request, Expense $expense)
     {
-        $this->authorizeRole(['admin', 'chef_projet']);
+        $this->authorizeRole(['admin', 'project_manager']);
 
         $validated = $request->validate([
             'category_id'  => 'required|exists:expense_categories,id',
@@ -171,7 +171,7 @@ class ExpenseController extends Controller
     // ── DESTROY — Supprimer une dépense ───────────────────
     public function destroy(Expense $expense)
     {
-        $this->authorizeRole(['admin', 'chef_projet']);
+        $this->authorizeRole(['admin', 'project_manager']);
 
         // Supprimer le fichier justificatif si présent
         if ($expense->receipt_path) {

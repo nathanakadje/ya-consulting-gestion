@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ReportController;
 use Inertia\Inertia;
 
 // Route::get('/', function () {
@@ -46,4 +47,9 @@ Route::middleware([
 
     // Téléchargement justificatif
     Route::get('/expenses/{expense}/receipt',   [ExpenseController::class, 'downloadReceipt'])->name('expenses.receipt');
+
+    // ── Rapports ──────────────────────────────────────────
+    Route::get('/reports',              [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export-pdf',   [ReportController::class, 'exportPdf'])->name('reports.pdf');
+    Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.excel');
 });

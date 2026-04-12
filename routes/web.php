@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ExpenseController;
 use Inertia\Inertia;
 
 // Route::get('/', function () {
@@ -28,4 +30,20 @@ Route::middleware([
 
     Route::patch('user/theme', [UserController::class, 'updateTheme'])
         ->name('user.theme');
+
+    Route::resource('projects', ProjectController::class);
+
+
+    // ── Dépenses ──────────────────────────────────────────────
+    // GET    /expenses               → index  (liste globale)
+    // POST   /expenses               → store  (créer)
+    // PUT    /expenses/{expense}     → update (modifier)
+    // DELETE /expenses/{expense}     → destroy (supprimer)
+    Route::get('/expenses',                     [ExpenseController::class, 'index'])->name('expenses.index');
+    Route::post('/expenses',                    [ExpenseController::class, 'store'])->name('expenses.store');
+    Route::put('/expenses/{expense}',           [ExpenseController::class, 'update'])->name('expenses.update');
+    Route::delete('/expenses/{expense}',        [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+
+    // Téléchargement justificatif
+    Route::get('/expenses/{expense}/receipt',   [ExpenseController::class, 'downloadReceipt'])->name('expenses.receipt');
 });

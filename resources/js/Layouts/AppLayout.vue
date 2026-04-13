@@ -160,13 +160,15 @@ router.on("navigate", () => {
 });
 
 // ── Navigation items ──────────────────────────────────────────
-const navItems = [
-    { label: "Dashboard", icon: "dashboard", route: "/dashboard", exact: true },
-    { label: "Projets", icon: "account_tree", route: "/projects" },
-    { label: "Dépenses", icon: "receipt_long", route: "/expenses" },
-    { label: "Rapports", icon: "bar_chart", route: "/reports" },
-    { label: "Équipe", icon: "groups", route: "/team" },
-];
+// const navItems = [
+//     { label: "Dashboard", icon: "dashboard", route: "/dashboard", exact: true },
+//     { label: "Projets", icon: "account_tree", route: "/projects" },
+//     { label: "Dépenses", icon: "receipt_long", route: "/expenses" },
+//     { label: "Rapports", icon: "bar_chart", route: "/reports" },
+//     { label: "Équipe", icon: "groups", route: "/team" },
+// ];
+
+const navItems = computed(() => page.props.auth.user?.nav ?? []);
 </script>
 
 <template>

@@ -47,7 +47,7 @@ class ActivityLog extends Model
     public static function log(string $action, $model = null, string $description = '', array $old = [], array $new = []): void
     {
         self::create([
-            // 'user_id'       => auth()->id(),
+            'user_id'       => auth()->id(),
             'action'        => $action,
             'description'   => $description,
             'loggable_id'   => $model?->id,

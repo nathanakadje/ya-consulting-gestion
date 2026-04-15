@@ -7,6 +7,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\ClientController;
 use Inertia\Inertia;
 
 // Route::get('/', function () {
@@ -34,6 +35,9 @@ Route::middleware([
         ->name('user.theme');
 
     Route::resource('projects', ProjectController::class);
+    // web.php
+    Route::patch('/projects/{project}/status', [ProjectController::class, 'updateStatus'])
+        ->name('projects.update-status');
 
 
     // ── Dépenses ──────────────────────────────────────────────
@@ -79,4 +83,8 @@ Route::middleware([
         // Route::delete('/expenses/{expense}',        [ExpenseController::class, 'destroy'])->name('expenses.destroy');
         // Téléchargement justificatif
     });
+
+    Route::post('/clients/quick-create', [ClientController::class, 'quickCreate'])
+        ->middleware('role:admin,project_manager')
+        ->name('clients.quick-create');
 });

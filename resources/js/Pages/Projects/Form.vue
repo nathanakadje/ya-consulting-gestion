@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import ClientQuickModal from "@/Components/ClientQuickModal.vue";
 
 const props = defineProps({
     project: { type: Object, default: null },
@@ -24,7 +25,6 @@ const form = useForm({
     budget_materiel: props.project?.budget_materiel ?? "",
     budget_transport: props.project?.budget_transport ?? "",
     budget_autres: props.project?.budget_autres ?? "",
-    // IMPORTANT : format Y-m-d pour les inputs type="date"
     start_date: props.project?.start_date_raw ?? "",
     end_date_planned: props.project?.end_date_planned_raw ?? "",
     end_date_actual: props.project?.end_date_actual_raw ?? "",
@@ -36,6 +36,22 @@ function submit() {
     } else {
         form.post("/projects");
     }
+}
+
+// ── Liste clients locale (réactive) ──────────────────────
+// Initialisée depuis les props, mise à jour quand on crée un client
+const localClients = ref([...props.clients]);
+
+// ── Modal création rapide client ──────────────────────────
+const showClientModal = ref(false);
+
+function onClientCreated(newClient) {
+    // 1. Ajouter dans la liste locale
+    localClients.value.push(newClient);
+    // 2. Trier par nom (alphabétique)
+    localClients.value.sort((a, b) => a.name.localeCompare(b.name, "fr"));
+    // 3. Sélectionner automatiquement le nouveau client
+    form.client_id = newClient.id;
 }
 
 // ── Calculs budget ────────────────────────────────────────
@@ -71,12 +87,7 @@ const steps = [
     { label: "Budget", icon: "account_balance_wallet" },
 ];
 
-// Validation par étape avant avancer
 function goNext() {
-    if (step.value === 0 && !form.name) {
-        form.validate("name");
-        return;
-    }
     if (step.value < steps.length - 1) step.value++;
 }
 function goPrev() {
@@ -99,7 +110,6 @@ function fmt(v) {
     return new Intl.NumberFormat("fr-FR").format(Math.round(v ?? 0)) + " FCFA";
 }
 
-// Ligne budget dans la répartition
 const budgetLines = [
     {
         key: "budget_main_oeuvre",
@@ -130,6 +140,11 @@ const budgetLines = [
         colorIcon: "text-gray-400",
     },
 ];
+
+// Client actuellement sélectionné (pour le badge)
+const selectedClient = computed(
+    () => localClients.value.find((c) => c.id == form.client_id) ?? null,
+);
 </script>
 
 <template>
@@ -172,7 +187,7 @@ const budgetLines = [
                 </div>
             </div>
 
-            <!-- Stepper navigation -->
+            <!-- Stepper -->
             <div
                 class="flex items-center gap-2 mb-8 p-1.5 bg-white dark:bg-[#111318] border border-gray-100 dark:border-gray-800/70 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
             >
@@ -203,7 +218,6 @@ const budgetLines = [
                     <span class="text-[12px] font-bold hidden sm:block">{{
                         s.label
                     }}</span>
-                    <!-- Dot erreur -->
                     <span
                         v-if="
                             (i === 0 &&
@@ -218,30 +232,8 @@ const budgetLines = [
                 </button>
             </div>
 
-            <!-- Erreurs globales (si submit depuis n'importe quelle étape) -->
-            <div
-                v-if="
-                    Object.keys(form.errors).length &&
-                    form.wasSuccessful === false
-                "
-                class="mb-5 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 rounded-xl"
-            >
-                <p
-                    class="text-[12px] font-semibold text-red-600 dark:text-red-400 flex items-center gap-2"
-                >
-                    <span
-                        class="material-symbols-outlined text-[16px]"
-                        style="font-variation-settings: &quot;FILL&quot; 1"
-                        >error</span
-                    >
-                    Veuillez corriger les erreurs avant de continuer.
-                </p>
-            </div>
-
             <form @submit.prevent="submit">
-                <!-- ══════════════════════════════════
-                     ÉTAPE 0 — INFORMATIONS
-                ══════════════════════════════════ -->
+                <!-- ══ ÉTAPE 0 — INFORMATIONS ══ -->
                 <div v-show="step === 0" class="space-y-5">
                     <div class="card p-6 space-y-5">
                         <p class="section-label">Informations générales</p>
@@ -328,12 +320,39 @@ const budgetLines = [
                             </div>
                         </div>
 
-                        <!-- Client + Chef de projet -->
+                        <!-- ════════════════════════════════════
+                             CLIENT + bouton "Nouveau client"
+                        ════════════════════════════════════ -->
                         <div class="grid grid-cols-2 gap-4">
+                            <!-- Client -->
                             <div>
-                                <label for="client_id" class="field-label"
-                                    >Client *</label
+                                <!-- Label + bouton côte à côte -->
+                                <div
+                                    class="flex items-center justify-between mb-1.5"
                                 >
+                                    <label
+                                        for="client_id"
+                                        class="field-label !mb-0"
+                                        >Client *</label
+                                    >
+                                    <button
+                                        type="button"
+                                        @click="showClientModal = true"
+                                        class="flex items-center gap-1 text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors group"
+                                    >
+                                        <span
+                                            class="material-symbols-outlined text-[14px]"
+                                            style="
+                                                font-variation-settings: &quot;FILL&quot;
+                                                    1;
+                                            "
+                                            >add_circle</span
+                                        >
+                                        Nouveau client
+                                    </button>
+                                </div>
+
+                                <!-- Select clients -->
                                 <div class="relative">
                                     <select
                                         id="client_id"
@@ -347,7 +366,7 @@ const budgetLines = [
                                             — Sélectionner un client —
                                         </option>
                                         <option
-                                            v-for="c in clients"
+                                            v-for="c in localClients"
                                             :key="c.id"
                                             :value="c.id"
                                         >
@@ -359,9 +378,38 @@ const budgetLines = [
                                         >expand_more</span
                                     >
                                 </div>
+
+                                <!-- Badge client sélectionné -->
+                                <Transition name="badge">
+                                    <div
+                                        v-if="selectedClient"
+                                        class="mt-1.5 flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-600/10 border border-emerald-100 dark:border-emerald-600/20 rounded-lg"
+                                    >
+                                        <span
+                                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-[13px]"
+                                            style="
+                                                font-variation-settings: &quot;FILL&quot;
+                                                    1;
+                                            "
+                                            >verified</span
+                                        >
+                                        <span
+                                            class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 truncate"
+                                        >
+                                            {{ selectedClient.name }}
+                                        </span>
+                                        <span
+                                            v-if="selectedClient.city"
+                                            class="text-[10.5px] text-emerald-500/70 dark:text-emerald-600 ml-auto"
+                                        >
+                                            {{ selectedClient.city }}
+                                        </span>
+                                    </div>
+                                </Transition>
+
                                 <p
                                     v-if="form.errors.client_id"
-                                    class="field-error"
+                                    class="field-error mt-1.5"
                                 >
                                     <span
                                         class="material-symbols-outlined text-[13px]"
@@ -370,6 +418,8 @@ const budgetLines = [
                                     {{ form.errors.client_id }}
                                 </p>
                             </div>
+
+                            <!-- Chef de projet -->
                             <div>
                                 <label for="project_lead_id" class="field-label"
                                     >Chef de projet</label
@@ -418,7 +468,8 @@ const budgetLines = [
                                     inputCls(null),
                                     'resize-none leading-relaxed',
                                 ]"
-                            ></textarea>
+                            >
+                            </textarea>
                         </div>
                     </div>
 
@@ -436,9 +487,7 @@ const budgetLines = [
                     </div>
                 </div>
 
-                <!-- ══════════════════════════════════
-                     ÉTAPE 1 — PLANNING
-                ══════════════════════════════════ -->
+                <!-- ══ ÉTAPE 1 — PLANNING ══ -->
                 <div v-show="step === 1" class="space-y-5">
                     <div class="card p-6 space-y-5">
                         <p class="section-label">Dates du projet</p>
@@ -469,7 +518,7 @@ const budgetLines = [
                                 <label
                                     for="end_date_planned"
                                     class="field-label"
-                                    >Date de fin prévue *</label
+                                    >Fin prévue *</label
                                 >
                                 <input
                                     id="end_date_planned"
@@ -511,31 +560,33 @@ const budgetLines = [
                             </div>
                         </div>
 
-                        <!-- Durée calculée -->
-                        <div
-                            v-if="durationDays !== null"
-                            class="flex items-center gap-3 px-4 py-3 bg-primary-50 dark:bg-primary-600/10 border border-primary-100 dark:border-primary-600/20 rounded-xl"
-                        >
-                            <span
-                                class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-[18px]"
-                                style="
-                                    font-variation-settings: &quot;FILL&quot; 1;
-                                "
-                                >schedule</span
+                        <Transition name="badge">
+                            <div
+                                v-if="durationDays !== null"
+                                class="flex items-center gap-3 px-4 py-3 bg-primary-50 dark:bg-primary-600/10 border border-primary-100 dark:border-primary-600/20 rounded-xl"
                             >
-                            <p
-                                class="text-[12.5px] font-semibold text-gray-700 dark:text-gray-300"
-                            >
-                                Durée calculée :
                                 <span
-                                    class="text-primary-600 dark:text-primary-400 font-bold"
+                                    class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-[18px]"
+                                    style="
+                                        font-variation-settings: &quot;FILL&quot;
+                                            1;
+                                    "
+                                    >schedule</span
                                 >
-                                    {{ durationDays }} jour{{
-                                        durationDays > 1 ? "s" : ""
-                                    }}
-                                </span>
-                            </p>
-                        </div>
+                                <p
+                                    class="text-[12.5px] font-semibold text-gray-700 dark:text-gray-300"
+                                >
+                                    Durée calculée :
+                                    <span
+                                        class="text-primary-600 dark:text-primary-400 font-bold"
+                                    >
+                                        {{ durationDays }} jour{{
+                                            durationDays > 1 ? "s" : ""
+                                        }}
+                                    </span>
+                                </p>
+                            </div>
+                        </Transition>
                     </div>
 
                     <div class="flex justify-between">
@@ -562,14 +613,11 @@ const budgetLines = [
                     </div>
                 </div>
 
-                <!-- ══════════════════════════════════
-                     ÉTAPE 2 — BUDGET
-                ══════════════════════════════════ -->
+                <!-- ══ ÉTAPE 2 — BUDGET ══ -->
                 <div v-show="step === 2" class="space-y-5">
                     <div class="card p-6 space-y-5">
                         <p class="section-label">Budget du projet</p>
 
-                        <!-- Budget total -->
                         <div>
                             <label for="budget" class="field-label"
                                 >Budget total (FCFA) *</label
@@ -604,7 +652,6 @@ const budgetLines = [
                             </p>
                         </div>
 
-                        <!-- Répartition -->
                         <div>
                             <p class="section-label mb-3">
                                 Répartition
@@ -655,7 +702,6 @@ const budgetLines = [
                             </div>
                         </div>
 
-                        <!-- Barre répartition -->
                         <div
                             v-if="budgetTotal > 0"
                             class="p-4 bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-gray-800/50 rounded-xl"
@@ -709,16 +755,17 @@ const budgetLines = [
                                             line.colorBar,
                                         ]"
                                     ></div>
-                                    <span class="text-[10.5px] text-gray-400">
-                                        {{ line.label }} —
-                                        {{ pct(form[line.key]).toFixed(0) }}%
-                                    </span>
+                                    <span class="text-[10.5px] text-gray-400"
+                                        >{{ line.label }} —
+                                        {{
+                                            pct(form[line.key]).toFixed(0)
+                                        }}%</span
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Actions finales -->
                     <div class="flex items-center justify-between">
                         <button
                             type="button"
@@ -747,6 +794,10 @@ const budgetLines = [
                                 <span
                                     v-else
                                     class="material-symbols-outlined text-[17px]"
+                                    style="
+                                        font-variation-settings: &quot;FILL&quot;
+                                            1;
+                                    "
                                 >
                                     {{ isEditing ? "save" : "add_circle" }}
                                 </span>
@@ -761,6 +812,12 @@ const budgetLines = [
                 </div>
             </form>
         </div>
+
+        <!-- ══ Modal création rapide client ══ -->
+        <ClientQuickModal
+            v-model="showClientModal"
+            @created="onClientCreated"
+        />
     </AppLayout>
 </template>
 
@@ -793,5 +850,16 @@ const budgetLines = [
            text-gray-500 dark:text-gray-400
            text-[12.5px] font-semibold rounded-xl
            hover:bg-gray-200 dark:hover:bg-gray-700 transition-all;
+}
+
+/* Badge client / durée */
+.badge-enter-active,
+.badge-leave-active {
+    transition: all 0.25s ease;
+}
+.badge-enter-from,
+.badge-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
 }
 </style>

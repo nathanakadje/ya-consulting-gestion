@@ -93,41 +93,43 @@
                             class="bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-800"
                         >
                             <th
-                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-gray-400"
+                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
                             >
                                 Projet
                             </th>
                             <th
-                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-gray-400"
+                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
                             >
                                 Client
                             </th>
                             <th
-                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-gray-400"
+                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
                             >
                                 Statut
                             </th>
                             <th
-                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-gray-400 text-right"
+                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden text-right"
                             >
                                 Budget
                             </th>
                             <th
-                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-gray-400 text-right"
+                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden text-right"
                             >
                                 Dépenses
                             </th>
                             <th
-                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-gray-400 text-right"
+                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden text-right"
                             >
                                 Marge
                             </th>
                             <th
-                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-gray-400"
+                                class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
                             >
                                 Progression
                             </th>
-                            <th class="px-5 py-3.5"></th>
+                            <th
+                                class="px-5 py-3.5 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            ></th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50 dark:divide-gray-800">

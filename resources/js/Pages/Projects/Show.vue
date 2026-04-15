@@ -53,6 +53,13 @@ function execDel() {
 }
 
 function barH(amount, months) {
+    console.log(
+        "Calcul pour le mois :",
+        amount,
+        "sur un tableau de",
+        months?.length,
+        "éléments",
+    );
     const max = Math.max(...months.map((m) => m.amount), 1);
     return Math.max((amount / max) * 100, 4);
 }
@@ -115,11 +122,13 @@ function fmtS(v) {
                                     icon: 'business',
                                     label: 'Client',
                                     val: project.client?.name,
+                                    color: 'text-blue-500',
                                 },
                                 {
                                     icon: 'person',
                                     label: 'Chef de projet',
                                     val: project.lead?.name ?? 'Non assigné',
+                                    color: 'text-emerald-600',
                                 },
                                 {
                                     icon: 'calendar_month',
@@ -128,13 +137,15 @@ function fmtS(v) {
                                         project.start_date +
                                         ' → ' +
                                         project.end_date_planned,
+                                    color: 'text-amber-500',
                                 },
                             ]"
                             :key="meta.label"
                             class="flex items-center gap-2"
                         >
                             <span
-                                class="material-symbols-outlined text-gray-400 text-[15px]"
+                                class="material-symbols-outlined text-[15px]"
+                                :class="meta.color"
                                 >{{ meta.icon }}</span
                             >
                             <div>
@@ -160,7 +171,7 @@ function fmtS(v) {
                         @change="changeStatus($event.target.value)"
                         class="text-[12.5px] font-semibold border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 pr-8 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 outline-none focus:ring-2 focus:ring-primary-600/20 cursor-pointer appearance-none"
                     >
-                        <option value="en_cours">🟢 En cours</option>
+                        <option value="en_cours">🔵 En cours</option>
                         <option value="en_pause">🟡 En pause</option>
                         <option value="termine">✅ Terminé</option>
                     </select>
@@ -215,7 +226,7 @@ function fmtS(v) {
                                 class="h-[5px] bg-gray-100 dark:bg-gray-800 rounded-full"
                             >
                                 <div
-                                    class="h-full bg-primary-200 dark:bg-primary-900/30 rounded-full w-full"
+                                    class="h-full bg-amber-200 dark:bg-amber-900/30 rounded-full w-full"
                                 ></div>
                             </div>
                         </div>
@@ -227,7 +238,7 @@ function fmtS(v) {
                                     >Dépenses réelles</span
                                 >
                                 <span
-                                    class="font-bold font-mono text-primary-600 dark:text-primary-400"
+                                    class="font-bold font-mono text-amber-600 dark:text-amber-500"
                                     >{{ fmt(financials.total_expenses) }}</span
                                 >
                             </div>
@@ -301,6 +312,7 @@ function fmtS(v) {
                 </div>
 
                 <!-- Burn par mois -->
+
                 <div v-if="charts.by_month?.length" class="card p-5">
                     <h4
                         class="font-headline font-bold text-gray-900 dark:text-white text-[13px] mb-4"
@@ -417,6 +429,43 @@ function fmtS(v) {
                         <table class="w-full text-left">
                             <thead>
                                 <tr
+                                    class="border-b border-gray-100 dark:border-gray-800/50 text-[10.5px] font-bold uppercase tracking-[0.12em]"
+                                >
+                                    <th
+                                        class="px-5 py-3 text-left bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                                    >
+                                        Date
+                                        <div
+                                            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-primary-400/10 to-transparent -translate-x-full animate-refresh-shimmer"
+                                        ></div>
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 text-left bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400"
+                                    >
+                                        Description
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 text-left bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400"
+                                    >
+                                        Catégorie
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 text-right bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400"
+                                    >
+                                        Montant
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 text-left bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400"
+                                    >
+                                        Par
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 w-20 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400"
+                                    ></th>
+                                </tr>
+                            </thead>
+                            <!-- <thead>
+                                <tr
                                     class="border-b border-gray-50 dark:border-gray-800/50 text-[10.5px] font-bold uppercase tracking-[0.08em] text-gray-400"
                                 >
                                     <th class="px-5 py-3">Date</th>
@@ -428,7 +477,7 @@ function fmtS(v) {
                                     <th class="px-5 py-3">Par</th>
                                     <th class="px-5 py-3 w-20"></th>
                                 </tr>
-                            </thead>
+                            </thead> -->
                             <tbody
                                 class="divide-y divide-gray-50 dark:divide-gray-800/40"
                             >
@@ -579,7 +628,7 @@ function fmtS(v) {
                             >Total dépenses</span
                         >
                         <span
-                            class="font-headline font-extrabold text-[15px] text-primary-600 dark:text-primary-400"
+                            class="font-headline font-extrabold text-[15px] text-amber-600 dark:text-amber-500"
                             >{{ fmt(financials.total_expenses) }}</span
                         >
                     </div>
@@ -673,5 +722,21 @@ function fmtS(v) {
 .modal-enter-from,
 .modal-leave-to {
     opacity: 0;
+}
+
+@keyframes refresh-shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    15% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.animate-refresh-shimmer {
+    animation: refresh-shimmer 10s infinite ease-in-out;
 }
 </style>

@@ -454,6 +454,27 @@ watch(
 );
 
 // ── Submit ────────────────────────────────────────────────────
+// function submit() {
+//     // Attacher le fichier s'il y en a un
+//     if (selectedFile.value) {
+//         form.receipt = selectedFile.value;
+//     }
+
+//     if (isEditing.value) {
+//         // PUT /expenses/{id}
+//         form.post(`/expenses/${props.expense.id}`, {
+//             method: "put",
+//             forceFormData: true, // nécessaire pour l'upload fichier
+//             onSuccess: () => close(),
+//         });
+//     } else {
+//         // POST /expenses
+//         form.post("/expenses", {
+//             forceFormData: true,
+//             onSuccess: () => close(),
+//         });
+//     }
+// }
 function submit() {
     // Attacher le fichier s'il y en a un
     if (selectedFile.value) {
@@ -461,14 +482,17 @@ function submit() {
     }
 
     if (isEditing.value) {
-        // PUT /expenses/{id}
-        form.post(`/expenses/${props.expense.id}`, {
-            method: "put",
-            forceFormData: true, // nécessaire pour l'upload fichier
+        // Pour une modification avec upload de fichier :
+        // On utilise POST mais on injecte _method: 'put'
+        form.transform((data) => ({
+            ...data,
+            _method: "put",
+        })).post(`/expenses/${props.expense.id}`, {
+            forceFormData: true,
             onSuccess: () => close(),
         });
     } else {
-        // POST /expenses
+        // Pour une création classique
         form.post("/expenses", {
             forceFormData: true,
             onSuccess: () => close(),

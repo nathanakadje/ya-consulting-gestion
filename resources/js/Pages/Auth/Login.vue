@@ -141,13 +141,13 @@ const submit = () => {
                             <label for="password" class="ya-label"
                                 >Mot de passe</label
                             >
-                            <Link
+                            <!-- <Link
                                 v-if="canResetPassword"
                                 href="/forgot-password"
                                 class="ya-forgot"
                             >
                                 Mot de passe oublié ?
-                            </Link>
+                            </Link> -->
                         </div>
                         <div class="ya-input-wrap">
                             <span class="ya-input-icon">
@@ -287,11 +287,12 @@ const submit = () => {
         transparent 100%
     ); */
     background: radial-gradient(
-        circle at 35% 40%,
-        #7c3aed,
-        #701c97 50%,
-        #2e1065 80%,
-        transparent 100%
+        circle at 70% 30%,
+        rgba(168, 85, 247, 0.9) 0%,
+        rgba(139, 92, 246, 0.6) 20%,
+        rgba(91, 33, 182, 0.4) 40%,
+        rgba(30, 27, 75, 0.2) 60%,
+        transparent 75%
     );
     opacity: 0.85;
 }
@@ -320,7 +321,7 @@ const submit = () => {
 }
 
 /* Étoiles simulées (points CSS) */
-.ya-stars {
+/* .ya-stars {
     position: absolute;
     inset: 0;
     background-image:
@@ -369,6 +370,92 @@ const submit = () => {
             rgba(255, 255, 255, 0.3) 0%,
             transparent 100%
         );
+} */
+.ya-stars {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(
+            1px 1px at 15% 20%,
+            rgba(255, 255, 255, 0.8),
+            transparent 100%
+        ),
+        radial-gradient(
+            1px 1px at 28% 65%,
+            rgba(255, 255, 255, 0.6),
+            transparent 100%
+        ),
+        radial-gradient(
+            1px 1px at 42% 15%,
+            rgba(255, 255, 255, 0.5),
+            transparent 100%
+        ),
+        radial-gradient(
+            1px 1px at 55% 80%,
+            rgba(255, 255, 255, 0.6),
+            transparent 100%
+        ),
+        radial-gradient(
+            1px 1px at 8% 48%,
+            rgba(255, 255, 255, 0.4),
+            transparent 100%
+        ),
+        radial-gradient(
+            1.5px 1.5px at 70% 30%,
+            rgba(255, 255, 255, 0.5),
+            transparent 100%
+        ),
+        radial-gradient(
+            2px 2px at 35% 42%,
+            rgba(255, 255, 255, 0.7),
+            transparent 100%
+        ),
+        radial-gradient(
+            1px 1px at 18% 85%,
+            rgba(255, 255, 255, 0.4),
+            transparent 100%
+        ),
+        radial-gradient(
+            1.5px 1.5px at 60% 55%,
+            rgba(255, 255, 255, 0.5),
+            transparent 100%
+        );
+
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+    opacity: 0.8;
+    animation: twinkle 4s infinite ease-in-out;
+}
+.ya-stars::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(
+            1px 1px at 10% 10%,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        ),
+        radial-gradient(
+            1px 1px at 90% 90%,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+    opacity: 0.3;
+}
+
+@keyframes ya-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+@keyframes twinkle {
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
 /* ═══════════════════════════════════════
@@ -539,8 +626,10 @@ const submit = () => {
     transition:
         border-color 0.15s,
         background 0.15s;
-    font-family: inherit;
+    font-family: "Plus Jakarta Sans", sans-serif;
     -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .ya-input::placeholder {
@@ -662,12 +751,6 @@ const submit = () => {
     border-radius: 50%;
     animation: ya-spin 0.7s linear infinite;
     display: inline-block;
-}
-
-@keyframes ya-spin {
-    to {
-        transform: rotate(360deg);
-    }
 }
 
 /* ═══════════════════════════════════════

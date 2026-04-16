@@ -8,14 +8,14 @@
                 ? 'justify-center px-0 py-[9px]'
                 : 'gap-2.5 px-2.5 py-[8px]',
             isActive
-                ? 'bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400'
+                ? 'bg-primary-50 dark:bg-violet-600/10 text-primary-600 dark:text-violet-400'
                 : 'text-gray-500 dark:text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.04]',
         ]"
     >
         <!-- Barre active gauche -->
         <span
             v-if="isActive"
-            class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] bg-primary-600 dark:bg-primary-400 rounded-r-full"
+            class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] bg-violet-600 dark:bg-violet-400 rounded-r-full"
         ></span>
 
         <!-- Icône Material Symbols -->
@@ -24,7 +24,7 @@
             :class="[
                 collapsed ? 'text-[20px]' : 'text-[18px]',
                 isActive
-                    ? 'text-primary-600 dark:text-primary-400'
+                    ? 'text-violet-600 dark:text-violet-400'
                     : 'text-gray-400 dark:text-gray-600 group-hover:text-gray-600 dark:group-hover:text-gray-300',
             ]"
             :style="isActive ? 'font-variation-settings:\'FILL\' 1' : ''"

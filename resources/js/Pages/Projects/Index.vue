@@ -44,7 +44,7 @@
                     :class="[
                         'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all',
                         filters.status === f.value
-                            ? 'bg-emerald-500 dark:bg-emerald-600/10 text-white shadow-sm'
+                            ? 'bg-emerald-400 dark:bg-emerald-100/30 text-white shadow-sm'
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200',
                     ]"
                 >
@@ -143,10 +143,10 @@
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
                                     <div
-                                        class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0"
+                                        class="w-9 h-9 rounded-xl bg-violet-50 dark:bg-violet-900/30 flex items-center justify-center flex-shrink-0"
                                     >
                                         <span
-                                            class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-[18px]"
+                                            class="material-symbols-outlined text-violet-600 dark:text-violet-400 text-[18px]"
                                             >folder_open</span
                                         >
                                     </div>

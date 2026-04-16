@@ -199,10 +199,10 @@ function fmtShort(v) {
                     <div class="card-header">
                         <div class="flex items-center gap-2.5">
                             <div
-                                class="card-icon bg-primary-50 dark:bg-primary-600/10"
+                                class="card-icon bg-violet-50 dark:bg-violet-600/10"
                             >
                                 <span
-                                    class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-[16px]"
+                                    class="material-symbols-outlined text-violet-600 dark:text-violet-400 text-[16px]"
                                     style="
                                         font-variation-settings: &quot;FILL&quot;
                                             1;
@@ -245,10 +245,10 @@ function fmtShort(v) {
                             class="flex items-center gap-3.5 px-5 py-3.5 hover:bg-gray-50/70 dark:hover:bg-white/[0.02] transition-colors group"
                         >
                             <div
-                                class="w-[34px] h-[34px] rounded-xl bg-primary-50 dark:bg-primary-600/10 flex items-center justify-center flex-shrink-0"
+                                class="w-[34px] h-[34px] rounded-xl bg-violet-50 dark:bg-violet-600/10 flex items-center justify-center flex-shrink-0"
                             >
                                 <span
-                                    class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-[16px]"
+                                    class="material-symbols-outlined text-violet-600 dark:text-violet-400 text-[16px]"
                                     style="
                                         font-variation-settings: &quot;FILL&quot;
                                             1;
@@ -458,7 +458,7 @@ function fmtShort(v) {
                             >Ce mois</span
                         >
                         <span
-                            class="font-headline font-extrabold text-[13.5px] text-primary-600 dark:text-primary-400"
+                            class="font-headline font-extrabold text-[13.5px] text-amber-600 dark:text-amber-400"
                         >
                             {{ fmt(stats.expenses_this_month) }}
                         </span>

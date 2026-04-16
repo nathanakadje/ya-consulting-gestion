@@ -638,7 +638,9 @@ function statusLabel(s) {
                                     >
                                         Montant
                                     </th>
-                                    <th class="px-5 py-3 text-center">
+                                    <th
+                                        class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden text-center"
+                                    >
                                         Statut
                                     </th>
                                 </tr>

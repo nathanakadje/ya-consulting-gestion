@@ -93,7 +93,7 @@ function initials(name) {
                 icon="person"
                 label="Collaborateurs"
                 :value="stats.collaborateurs"
-                color="emerald"
+                color="amber"
             />
         </div>
 

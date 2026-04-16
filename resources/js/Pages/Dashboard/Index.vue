@@ -5,13 +5,15 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import StatCard from "@/Components/StatCard.vue";
 import StatusBadge from "@/Components/StatusBadge.vue";
 
-// ── Props depuis DashboardController ─────────────────────────
+// ── Props depuis DashboardController ─────────────────────
 const props = defineProps({
     stats: {
         type: Object,
         default: () => ({
+            total_projects: 0,
             active_projects: 0,
             paused_projects: 0,
+            terminated_projects: 0,
             total_budget: 0,
             avg_margin: 0,
             expenses_this_month: 0,
@@ -22,11 +24,10 @@ const props = defineProps({
 });
 
 const page = usePage();
+const user = computed(() => page.props.auth.user);
 
-const firstName = computed(
-    () => page.props.auth.user?.name?.split(" ")[0] ?? "là",
-);
-
+// ── Salutation dynamique ──────────────────────────────────
+const firstName = computed(() => user.value?.name?.split(" ")[0] ?? "là");
 const today = computed(() =>
     new Date().toLocaleDateString("fr-FR", {
         weekday: "long",
@@ -35,7 +36,6 @@ const today = computed(() =>
         year: "numeric",
     }),
 );
-
 const greeting = computed(() => {
     const h = new Date().getHours();
     if (h < 12) return "Bonjour";
@@ -43,61 +43,117 @@ const greeting = computed(() => {
     return "Bonsoir";
 });
 
-function formatCurrency(v) {
-    if (!v && v !== 0) return "—";
-    return new Intl.NumberFormat("fr-FR").format(Math.round(v)) + " FCFA";
-}
+// ── Accès rapides filtrés selon permissions ───────────────
+const quickActions = computed(() => {
+    const actions = [];
 
-function formatShort(v) {
-    if (!v && v !== 0) return "—";
-    if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + " M FCFA";
-    if (v >= 1_000) return Math.round(v / 1_000) + " K FCFA";
-    return Math.round(v) + " FCFA";
-}
+    if (user.value?.can?.manage_projects) {
+        actions.push({
+            href: "/projects/create",
+            icon: "add_circle",
+            label: "Nouveau projet",
+            cls: "bg-primary-600 hover:bg-primary-700 text-white shadow-sm shadow-primary-600/20",
+            iconCls: "",
+        });
+    }
+    if (user.value?.can?.create_expense) {
+        actions.push({
+            href: "/expenses",
+            icon: "receipt_long",
+            label: "Dépenses",
+            cls: "bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]",
+            iconCls: "text-amber-500",
+        });
+    }
+    if (user.value?.can?.view_reports) {
+        actions.push({
+            href: "/reports",
+            icon: "bar_chart",
+            label: "Rapports",
+            cls: "bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]",
+            iconCls: "text-violet-500",
+        });
+    }
+    if (user.value?.can?.manage_users) {
+        actions.push({
+            href: "/team",
+            icon: "groups",
+            label: "Équipe",
+            cls: "bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]",
+            iconCls: "text-emerald-500",
+        });
+    }
 
+    // Toujours ajouter la liste projets si pas encore là
+    if (!actions.find((a) => a.href === "/projects")) {
+        actions.splice(1, 0, {
+            href: "/projects",
+            icon: "account_tree",
+            label: "Projets",
+            cls: "bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]",
+            iconCls: "text-primary-500",
+        });
+    }
+
+    return actions.slice(0, 4); // max 4 tuiles 2x2
+});
+
+// ── Couleur barre progression ─────────────────────────────
 function progressColor(pct) {
     if (pct >= 95) return "bg-red-500";
     if (pct >= 75) return "bg-amber-500";
     return "bg-primary-600";
+}
+
+// ── Formatage ─────────────────────────────────────────────
+function fmt(v) {
+    if (!v && v !== 0) return "—";
+    return new Intl.NumberFormat("fr-FR").format(Math.round(v)) + " FCFA";
+}
+function fmtShort(v) {
+    if (!v && v !== 0) return "—";
+    if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + " M FCFA";
+    if (v >= 1_000) return Math.round(v / 1_000) + " K FCFA";
+    return Math.round(v) + " FCFA";
 }
 </script>
 
 <template>
     <Head title="Dashboard" />
 
-    <AppLayout title="Dashboard">
-        <!-- ── Bandeau de bienvenue ───────────────────────────── -->
-        <div class="flex items-center justify-between mb-6">
+    <AppLayout title="Dashboard" breadcrumb="Vue d'ensemble">
+        <!-- ── Bienvenue ──────────────────────────────────── -->
+        <div class="flex items-start justify-between mb-6 gap-4">
             <div>
                 <p
                     class="text-[10.5px] font-bold uppercase tracking-[0.15em] text-gray-400 dark:text-gray-600 mb-[5px]"
                 >
                     {{ today }}
                 </p>
-                <!-- <h3
+                <h3
                     class="font-headline text-[20px] font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight"
                 >
                     {{ greeting }}, {{ firstName }}
                     <span class="inline-block animate-wave origin-[70%_70%]"
                         >👋</span
                     >
-                </h3> -->
-                <!-- <p class="text-[12px] text-gray-400 dark:text-gray-500 mt-1">
+                </h3>
+                <p class="text-[12px] text-gray-400 dark:text-gray-500 mt-1">
                     Résumé de l'activité de Ya Consulting.
-                </p> -->
+                </p>
             </div>
 
             <Link
-                v-if="page.props.auth.user?.can?.manage_projects"
+                v-if="user?.can?.manage_projects"
                 href="/projects/create"
-                class="hidden sm:flex items-center gap-1.5 px-3.5 py-2 bg-primary-600 hover:bg-primary-700 text-white text-[12px] font-semibold rounded-xl shadow-sm shadow-primary-600/20 transition-all active:scale-95 flex-shrink-0"
+                class="hidden sm:flex items-center gap-1.5 px-3.5 py-2 flex-shrink-0 bg-primary-600 hover:bg-primary-700 text-white text-[12px] font-semibold rounded-xl shadow-sm shadow-primary-600/20 transition-all active:scale-95"
             >
                 <span class="material-symbols-outlined text-[16px]">add</span>
                 Nouveau projet
             </Link>
         </div>
 
-        <!-- ── 4 cartes stats ─────────────────────────────────── -->
+        <!-- ── 4 cartes stats ─────────────────────────────── -->
         <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
             <StatCard
                 icon="account_tree"
@@ -114,33 +170,32 @@ function progressColor(pct) {
             <StatCard
                 icon="account_balance_wallet"
                 label="Budget total"
-                :value="formatShort(stats.total_budget)"
-                trend="Tous projets actifs"
+                :value="fmtShort(stats.total_budget)"
+                :trend="`${stats.total_projects} projet${stats.total_projects > 1 ? 's' : ''}`"
                 color="emerald"
             />
             <StatCard
                 icon="trending_up"
                 label="Marge moyenne"
                 :value="(stats.avg_margin ?? 0) + '%'"
-                trend="Projets terminés"
+                :trend="`${stats.terminated_projects} terminé${stats.terminated_projects > 1 ? 's' : ''}`"
                 :trend-up="(stats.avg_margin ?? 0) >= 20"
                 color="violet"
             />
             <StatCard
                 icon="receipt_long"
                 label="Dépenses ce mois"
-                :value="formatShort(stats.expenses_this_month)"
+                :value="fmtShort(stats.expenses_this_month)"
                 trend="Mois en cours"
                 color="amber"
             />
         </div>
 
-        <!-- ── Corps principal 7/5 ───────────────────────────── -->
+        <!-- ── Grille principale 7/5 ──────────────────────── -->
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
-            <!-- ═══ Projets récents — 7 col ══════════════════ -->
+            <!-- ══ Projets récents — 7 col ════════════════ -->
             <div class="xl:col-span-7 flex flex-col">
                 <div class="card flex flex-col h-full">
-                    <!-- Header carte -->
                     <div class="card-header">
                         <div class="flex items-center gap-2.5">
                             <div
@@ -158,9 +213,17 @@ function progressColor(pct) {
                             <div>
                                 <h4 class="card-title">Projets récents</h4>
                                 <p class="card-subtitle">
-                                    {{ stats.active_projects }} actif{{
+                                    {{ stats.active_projects }}
+                                    actif{{
                                         stats.active_projects > 1 ? "s" : ""
                                     }}
+                                    <template v-if="stats.paused_projects > 0">
+                                        ·
+                                        <span class="text-amber-500"
+                                            >{{ stats.paused_projects }} en
+                                            pause</span
+                                        >
+                                    </template>
                                 </p>
                             </div>
                         </div>
@@ -172,7 +235,6 @@ function progressColor(pct) {
                         </Link>
                     </div>
 
-                    <!-- Lignes projets -->
                     <div
                         class="flex-1 divide-y divide-gray-50 dark:divide-gray-800/50"
                     >
@@ -182,7 +244,6 @@ function progressColor(pct) {
                             :href="`/projects/${project.id}`"
                             class="flex items-center gap-3.5 px-5 py-3.5 hover:bg-gray-50/70 dark:hover:bg-white/[0.02] transition-colors group"
                         >
-                            <!-- Avatar projet -->
                             <div
                                 class="w-[34px] h-[34px] rounded-xl bg-primary-50 dark:bg-primary-600/10 flex items-center justify-center flex-shrink-0"
                             >
@@ -196,7 +257,6 @@ function progressColor(pct) {
                                 >
                             </div>
 
-                            <!-- Nom + client -->
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2 mb-[2px]">
                                     <p
@@ -212,13 +272,12 @@ function progressColor(pct) {
                                 <p
                                     class="text-[11px] text-gray-400 truncate leading-tight"
                                 >
-                                    {{ project.client?.name }}
+                                    {{ project.client?.name ?? "—" }}
                                 </p>
                             </div>
 
-                            <!-- Barre progression -->
                             <div
-                                class="hidden md:flex flex-col items-end gap-1 w-[100px] flex-shrink-0"
+                                class="hidden md:flex flex-col items-end gap-1 w-[105px] flex-shrink-0"
                             >
                                 <div class="flex justify-between w-full">
                                     <span class="text-[10px] text-gray-400">
@@ -227,7 +286,7 @@ function progressColor(pct) {
                                     <span
                                         class="text-[10px] font-semibold text-gray-500 dark:text-gray-400 font-mono"
                                     >
-                                        {{ formatShort(project.budget) }}
+                                        {{ fmtShort(project.budget) }}
                                     </span>
                                 </div>
                                 <div
@@ -260,7 +319,7 @@ function progressColor(pct) {
                             </span>
                         </Link>
 
-                        <!-- État vide -->
+                        <!-- Vide -->
                         <div
                             v-if="!recentProjects.length"
                             class="py-12 flex flex-col items-center"
@@ -276,21 +335,22 @@ function progressColor(pct) {
                             <p
                                 class="text-[12px] font-medium text-gray-400 mb-2"
                             >
-                                Aucun projet
+                                Aucun projet pour le moment
                             </p>
                             <Link
+                                v-if="user?.can?.manage_projects"
                                 href="/projects/create"
                                 class="text-[11.5px] text-primary-600 dark:text-primary-400 font-semibold hover:underline flex items-center gap-1"
                             >
                                 <span
                                     class="material-symbols-outlined text-[13px]"
                                     >add</span
-                                >Créer un projet
+                                >
+                                Créer un projet
                             </Link>
                         </div>
                     </div>
 
-                    <!-- Pied carte -->
                     <div class="card-footer">
                         <Link
                             href="/projects"
@@ -305,7 +365,7 @@ function progressColor(pct) {
                 </div>
             </div>
 
-            <!-- ═══ Colonne droite — 5 col ═════════════════════ -->
+            <!-- ══ Colonne droite — 5 col ═════════════════ -->
             <div class="xl:col-span-5 flex flex-col gap-5">
                 <!-- Dépenses récentes -->
                 <div class="card">
@@ -338,7 +398,6 @@ function progressColor(pct) {
                             :key="expense.id"
                             class="flex items-center gap-3 px-5 py-3 hover:bg-gray-50/70 dark:hover:bg-white/[0.02] transition-colors"
                         >
-                            <!-- Pastille catégorie -->
                             <div
                                 class="w-[30px] h-[30px] rounded-xl flex items-center justify-center flex-shrink-0"
                                 :style="{
@@ -368,14 +427,14 @@ function progressColor(pct) {
                                 <p
                                     class="text-[10.5px] text-gray-400 truncate leading-tight mt-[1px]"
                                 >
-                                    {{ expense.project?.name }}
+                                    {{ expense.project?.name ?? "—" }}
                                 </p>
                             </div>
 
                             <span
                                 class="text-[12px] font-bold font-mono text-gray-900 dark:text-white whitespace-nowrap flex-shrink-0"
                             >
-                                {{ formatShort(expense.amount) }}
+                                {{ fmtShort(expense.amount) }}
                             </span>
                         </div>
 
@@ -401,14 +460,13 @@ function progressColor(pct) {
                         <span
                             class="font-headline font-extrabold text-[13.5px] text-primary-600 dark:text-primary-400"
                         >
-                            {{ formatCurrency(stats.expenses_this_month) }}
+                            {{ fmt(stats.expenses_this_month) }}
                         </span>
                     </div>
                 </div>
 
                 <!-- Jauge rentabilité -->
                 <div class="card p-5 relative overflow-hidden">
-                    <!-- Halo décoratif -->
                     <div
                         class="absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-primary-50 dark:bg-primary-600/5 blur-3xl pointer-events-none"
                     ></div>
@@ -431,6 +489,14 @@ function progressColor(pct) {
                                 {{ (stats.avg_margin ?? 0) >= 0 ? "+" : ""
                                 }}{{ stats.avg_margin ?? 0 }}%
                             </p>
+                            <p class="text-[10.5px] text-gray-400 mt-1">
+                                Sur {{ stats.terminated_projects }} projet{{
+                                    stats.terminated_projects > 1 ? "s" : ""
+                                }}
+                                terminé{{
+                                    stats.terminated_projects > 1 ? "s" : ""
+                                }}
+                            </p>
                         </div>
                         <div
                             class="w-[36px] h-[36px] rounded-xl bg-emerald-50 dark:bg-emerald-600/10 flex items-center justify-center"
@@ -445,7 +511,6 @@ function progressColor(pct) {
                         </div>
                     </div>
 
-                    <!-- Barre marge -->
                     <div class="relative mb-1.5">
                         <div
                             class="h-[5px] bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden"
@@ -468,12 +533,13 @@ function progressColor(pct) {
                                 }"
                             ></div>
                         </div>
-                        <!-- Marqueur objectif 20% -->
+                        <!-- Objectif 20% -->
                         <div
                             class="absolute top-0 h-[5px] w-px bg-gray-300/70 dark:bg-gray-600"
                             style="left: 20%"
                         ></div>
                     </div>
+
                     <div class="flex items-center justify-between">
                         <p class="text-[10px] text-gray-400">
                             Objectif
@@ -483,6 +549,7 @@ function progressColor(pct) {
                             >
                         </p>
                         <Link
+                            v-if="user?.can?.view_reports"
                             href="/reports"
                             class="text-[11px] font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-0.5"
                         >
@@ -494,97 +561,58 @@ function progressColor(pct) {
                     </div>
                 </div>
 
-                <!-- Accès rapides 2x2 -->
+                <!-- Accès rapides — filtrés selon les permissions du user -->
                 <div class="grid grid-cols-2 gap-3">
                     <Link
-                        href="/projects/create"
-                        class="quick-btn bg-primary-600 hover:bg-primary-700 text-white shadow-sm shadow-primary-600/20"
+                        v-for="action in quickActions"
+                        :key="action.href"
+                        :href="action.href"
+                        :class="['quick-btn group', action.cls]"
                     >
                         <span
                             class="material-symbols-outlined text-[20px] mb-1.5 transition-transform group-hover:scale-110"
+                            :class="action.iconCls"
                             style="font-variation-settings: &quot;FILL&quot; 1"
-                            >add_circle</span
                         >
-                        <span>Nouveau projet</span>
-                    </Link>
-                    <Link
-                        href="/expenses"
-                        class="quick-btn bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]"
-                    >
-                        <span
-                            class="material-symbols-outlined text-[20px] mb-1.5 text-amber-500 transition-transform group-hover:scale-110"
-                            style="font-variation-settings: &quot;FILL&quot; 1"
-                            >receipt_long</span
-                        >
-                        <span>Dépenses</span>
-                    </Link>
-                    <Link
-                        href="/reports"
-                        class="quick-btn bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]"
-                    >
-                        <span
-                            class="material-symbols-outlined text-[20px] mb-1.5 text-violet-500 transition-transform group-hover:scale-110"
-                            style="font-variation-settings: &quot;FILL&quot; 1"
-                            >bar_chart</span
-                        >
-                        <span>Rapports</span>
-                    </Link>
-                    <Link
-                        href="/team"
-                        class="quick-btn bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]"
-                    >
-                        <span
-                            class="material-symbols-outlined text-[20px] mb-1.5 text-emerald-500 transition-transform group-hover:scale-110"
-                            style="font-variation-settings: &quot;FILL&quot; 1"
-                            >groups</span
-                        >
-                        <span>Équipe</span>
+                            {{ action.icon }}
+                        </span>
+                        <span>{{ action.label }}</span>
                     </Link>
                 </div>
             </div>
-            <!-- fin col droite -->
         </div>
     </AppLayout>
 </template>
 
 <style scoped>
-/* ── Composants réutilisables ─────────────────────────────── */
 .card {
     @apply bg-white dark:bg-[#111318]
            rounded-2xl border border-gray-100 dark:border-gray-800/70
            shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03)]
            overflow-hidden;
 }
-
 .card-header {
     @apply flex items-center justify-between px-5 py-4
            border-b border-gray-100 dark:border-gray-800/60;
 }
-
 .card-title {
     @apply font-headline font-bold text-gray-900 dark:text-white text-[13.5px] leading-tight;
 }
-
 .card-subtitle {
     @apply text-[10.5px] text-gray-400 leading-tight mt-[1px];
 }
-
 .card-icon {
     @apply w-[30px] h-[30px] rounded-lg flex items-center justify-center flex-shrink-0;
 }
-
 .card-footer {
     @apply px-5 py-3 bg-gray-50/60 dark:bg-white/[0.015]
            border-t border-gray-100 dark:border-gray-800/60;
 }
-
 .see-all-link {
     @apply flex items-center gap-0.5 text-[11.5px] font-semibold
            text-primary-600 dark:text-primary-400
            hover:text-primary-700 dark:hover:text-primary-300 transition-colors;
 }
-
-/* Boutons accès rapides */
 .quick-btn {
     @apply flex flex-col items-center justify-center py-4 px-3
            rounded-2xl text-[11.5px] font-semibold text-center
@@ -592,7 +620,6 @@ function progressColor(pct) {
            shadow-[0_1px_3px_rgba(0,0,0,0.04)];
 }
 
-/* Animation main */
 @keyframes wave {
     0%,
     100% {

@@ -44,7 +44,7 @@
                     :class="[
                         'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all',
                         filters.status === f.value
-                            ? 'bg-primary-600 text-white shadow-sm'
+                            ? 'bg-emerald-500 dark:bg-emerald-600/10 text-white shadow-sm'
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200',
                     ]"
                 >
@@ -72,7 +72,7 @@
                 <Link
                     v-if="$page.props.auth.user?.can?.manage_projects"
                     href="/projects/create"
-                    class="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-sm shadow-primary-600/25 transition-all active:scale-95 whitespace-nowrap"
+                    class="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-sm shadow-primary-600/25 transition-all active:scale-95 whitespace-nowrap"
                 >
                     <span class="material-symbols-outlined text-[18px]"
                         >add</span

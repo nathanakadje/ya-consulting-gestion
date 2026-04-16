@@ -16,13 +16,13 @@ const roles = {
         label: "Administrateur",
         color: "bg-red-50 dark:bg-red-600/10 text-red-600 dark:text-red-400",
     },
-    chef_projet: {
+    project_manager: {
         label: "Chef de projet",
         color: "bg-primary-50 dark:bg-primary-600/10 text-primary-700 dark:text-primary-400",
     },
-    collaborateur: {
+    staff_member: {
         label: "Collaborateur",
-        color: "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400",
+        color: "bg-violet-100 dark:bg-gray-800 text-violet-600 dark:text-violet-400",
     },
 };
 
@@ -118,7 +118,7 @@ function initials(name) {
                 </div>
                 <Link
                     href="/team/create"
-                    class="flex items-center gap-1.5 px-3.5 py-2 bg-primary-600 hover:bg-primary-700 text-white text-[12px] font-semibold rounded-xl shadow-sm shadow-primary-600/20 transition-all active:scale-95"
+                    class="flex items-center gap-1.5 px-3.5 py-2 bg-violet-600 hover:bg-violet-700 text-white text-[12px] font-semibold rounded-xl shadow-sm shadow-violet-600/20 transition-all active:scale-95"
                 >
                     <span class="material-symbols-outlined text-[16px]"
                         >person_add</span
@@ -133,13 +133,39 @@ function initials(name) {
                         <tr
                             class="border-b border-gray-50 dark:border-gray-800/50 text-[10.5px] font-bold uppercase tracking-[0.08em] text-gray-400"
                         >
-                            <th class="px-5 py-3">Membre</th>
-                            <th class="px-5 py-3">Rôle</th>
-                            <th class="px-5 py-3 text-center">Projets</th>
-                            <th class="px-5 py-3 text-center">Dépenses</th>
-                            <th class="px-5 py-3">Statut</th>
-                            <th class="px-5 py-3">Depuis</th>
-                            <th class="px-5 py-3 w-28"></th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Membre
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Rôle
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden text-center"
+                            >
+                                Projets
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden text-center"
+                            >
+                                Dépenses
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Statut
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Depuis
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden w-28"
+                            ></th>
                         </tr>
                     </thead>
                     <tbody
@@ -154,7 +180,7 @@ function initials(name) {
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-3">
                                     <div
-                                        class="w-[34px] h-[34px] rounded-full overflow-hidden bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center flex-shrink-0 ring-2 ring-primary-600/10"
+                                        class="w-[34px] h-[34px] rounded-full overflow-hidden bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center flex-shrink-0 ring-2 ring-primary-600/10"
                                     >
                                         <img
                                             v-if="member.avatar"

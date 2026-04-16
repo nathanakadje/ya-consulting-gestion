@@ -144,15 +144,15 @@ function statusLabel(s) {
             </div>
             <!-- Badge période active -->
             <div
-                class="flex items-center gap-2 px-3.5 py-2 bg-primary-50 dark:bg-primary-600/10 border border-primary-200/60 dark:border-primary-600/20 rounded-xl"
+                class="flex items-center gap-2 px-3.5 py-2 bg-amber-50 dark:bg-amber-600/10 border border-amber-200/60 dark:border-primary-600/20 rounded-xl"
             >
                 <span
-                    class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-[16px]"
+                    class="material-symbols-outlined text-amber-600 dark:text-amber400 text-[16px]"
                     style="font-variation-settings: &quot;FILL&quot; 1"
                     >calendar_month</span
                 >
                 <span
-                    class="text-[12px] font-bold text-primary-700 dark:text-primary-300 capitalize"
+                    class="text-[12px] font-bold text-amber-700 dark:text-amber-300 capitalize"
                 >
                     {{ selectedMonth }}
                 </span>
@@ -174,7 +174,7 @@ function statusLabel(s) {
                             :class="[
                                 'w-full flex items-center justify-between p-3.5 rounded-xl border-2 text-left transition-all',
                                 reportType === rt.value
-                                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-600/10'
+                                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-600/10'
                                     : 'border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-[#111318]',
                             ]"
                         >
@@ -183,7 +183,7 @@ function statusLabel(s) {
                                     :class="[
                                         'text-[12.5px] font-bold leading-tight',
                                         reportType === rt.value
-                                            ? 'text-primary-700 dark:text-primary-300'
+                                            ? 'text-emerald-700 dark:text-emerald-300'
                                             : 'text-gray-800 dark:text-gray-200',
                                     ]"
                                 >
@@ -195,7 +195,7 @@ function statusLabel(s) {
                             </div>
                             <span
                                 v-if="reportType === rt.value"
-                                class="material-symbols-outlined text-primary-600 dark:text-primary-400 text-[18px] flex-shrink-0"
+                                class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-[18px] flex-shrink-0"
                                 style="
                                     font-variation-settings: &quot;FILL&quot; 1;
                                 "
@@ -243,7 +243,7 @@ function statusLabel(s) {
                     <button
                         @click="exportPdf"
                         :disabled="exporting.pdf"
-                        class="w-full flex items-center justify-center gap-2.5 py-3 px-5 bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white text-[13px] font-bold rounded-xl shadow-sm shadow-primary-600/20 transition-all active:scale-[0.98]"
+                        class="w-full flex items-center justify-center gap-2.5 py-3 px-5 bg-violet-600 hover:bg-violet-700 disabled:opacity-60 text-white text-[13px] font-bold rounded-xl shadow-sm shadow-primary-600/20 transition-all active:scale-[0.98]"
                     >
                         <span
                             v-if="exporting.pdf"
@@ -408,7 +408,7 @@ function statusLabel(s) {
                                 class="text-[10px] mt-1 font-medium"
                                 :class="
                                     (stats.evolution_pct ?? 0) <= 0
-                                        ? 'text-emerald-600 dark:text-emerald-400'
+                                        ? 'text-amber-600 dark:text-amber-400'
                                         : 'text-red-500'
                                 "
                             >
@@ -500,7 +500,7 @@ function statusLabel(s) {
                                     "
                                     :style="{
                                         height: barH(m.amount) + '%',
-                                        minHeight: '4px',
+                                        minHeight: '5px',
                                     }"
                                 >
                                     <!-- Tooltip -->
@@ -613,11 +613,29 @@ function statusLabel(s) {
                                 <tr
                                     class="border-b border-gray-50 dark:border-gray-800/60 text-[10.5px] font-bold uppercase tracking-[0.08em] text-gray-400"
                                 >
-                                    <th class="px-5 py-3">Date</th>
-                                    <th class="px-5 py-3">Projet</th>
-                                    <th class="px-5 py-3">Description</th>
-                                    <th class="px-5 py-3">Catégorie</th>
-                                    <th class="px-5 py-3 text-right">
+                                    <th
+                                        class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                                    >
+                                        Date
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                                    >
+                                        Projet
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                                    >
+                                        Description
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                                    >
+                                        Catégorie
+                                    </th>
+                                    <th
+                                        class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden text-right"
+                                    >
                                         Montant
                                     </th>
                                     <th class="px-5 py-3 text-center">
@@ -712,7 +730,7 @@ function statusLabel(s) {
                             Total estimé
                         </span>
                         <span
-                            class="font-headline font-extrabold text-[15px] text-primary-600 dark:text-primary-400"
+                            class="font-headline font-extrabold text-[15px] text-amber-500 dark:text-amber-400"
                         >
                             {{ fmt(stats.monthly_expenses) }}
                         </span>

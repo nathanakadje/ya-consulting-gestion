@@ -8,7 +8,10 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DashboardController;
+use App\Models\Project;
 use Inertia\Inertia;
+
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -27,10 +30,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard/Index');
-    })->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return Inertia::render('Dashboard/Index');
+    // })->name('dashboard');
 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::patch('user/theme', [UserController::class, 'updateTheme'])
         ->name('user.theme');
 
@@ -55,7 +59,7 @@ Route::middleware([
     Route::middleware('role:admin')->group(function () {
         Route::get('/team', [TeamController::class, 'index'])
             ->middleware('role:admin');
-        // Route::get('/team',              [TeamController::class, 'index'])->name('team.index');
+        Route::get('/team',              [TeamController::class, 'index'])->name('team.index');
         Route::get('/team/create',       [TeamController::class, 'create'])->name('team.create');
         Route::post('/team',             [TeamController::class, 'store'])->name('team.store');
         Route::get('/team/{user}/edit',  [TeamController::class, 'edit'])->name('team.edit');

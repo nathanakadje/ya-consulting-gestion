@@ -163,7 +163,7 @@
                 <button
                     v-if="canManage"
                     @click="openModal()"
-                    class="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-xl text-sm font-semibold transition-all active:scale-95 shadow-sm shadow-primary-600/20"
+                    class="flex items-center gap-2 px-4 py-2 bg-violet-700 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-all active:scale-95 shadow-sm shadow-primary-600/20"
                 >
                     <span class="material-symbols-outlined text-[18px]"
                         >add</span
@@ -178,14 +178,44 @@
                         <tr
                             class="border-b border-gray-50 dark:border-gray-800 text-[11px] font-bold uppercase tracking-widest text-gray-400"
                         >
-                            <th class="px-5 py-3">Date</th>
-                            <th class="px-5 py-3">Description</th>
-                            <th class="px-5 py-3">Projet</th>
-                            <th class="px-5 py-3">Catégorie</th>
-                            <th class="px-5 py-3 text-right">Montant</th>
-                            <th class="px-5 py-3">Statut</th>
-                            <th class="px-5 py-3">Ajouté par</th>
-                            <th class="px-5 py-3 w-24"></th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Date
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Description
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Projet
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Catégorie
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden text-right"
+                            >
+                                Montant
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Statut
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden"
+                            >
+                                Ajouté par
+                            </th>
+                            <th
+                                class="px-5 py-3 bg-primary-50 dark:bg-primary-600/10 text-primary-600 dark:text-primary-400 relative overflow-hidden w-24"
+                            ></th>
                         </tr>
                     </thead>
                     <tbody
@@ -217,7 +247,7 @@
                             <td class="px-5 py-3.5">
                                 <Link
                                     :href="`/projects/${expense.project?.id}`"
-                                    class="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline"
+                                    class="text-xs font-semibold text-gray-400 dark:text-gray-400 hover:underline"
                                 >
                                     {{ expense.project?.name }}
                                 </Link>

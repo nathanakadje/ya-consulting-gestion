@@ -8,6 +8,17 @@ const props = defineProps({
     member: { type: Object, default: null },
 });
 
+// Fonction utilitaire pour les classes d'input (réutilisée dans le template)
+function fieldClass(error) {
+    return [
+        "w-full rounded-xl border px-4 py-2.5 text-[12.5px] outline-none transition-all",
+        "bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400",
+        error
+            ? "border-red-400 focus:ring-2 focus:ring-red-400/20"
+            : "border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600/30",
+    ];
+}
+
 const isEditing = computed(() => !!props.member?.id);
 
 const form = useForm({
@@ -50,9 +61,9 @@ const roles = [
         label: "Collaborateur",
         desc: "Consultation uniquement : dépenses et statuts",
         icon: "person",
-        color: "text-gray-600 dark:text-gray-400",
-        bg: "bg-gray-50 dark:bg-gray-800",
-        border: "border-gray-400 dark:border-gray-500",
+        color: "text-amber-600 dark:text-amber-400",
+        bg: "bg-amber-50 dark:bg-amber-800",
+        border: "border-amber-400 dark:border-amber-500",
     },
 ];
 </script>
@@ -263,10 +274,6 @@ const roles = [
     </AppLayout>
 </template>
 
-<script>
-// Helpers définis séparément pour éviter l'erreur de double <script>
-</script>
-
 <style scoped>
 .card {
     @apply bg-white dark:bg-[#111318] rounded-2xl border border-gray-100 dark:border-gray-800/70 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03)];
@@ -281,16 +288,3 @@ const roles = [
     @apply mt-1.5 text-[11px] text-red-500 flex items-center gap-1;
 }
 </style>
-
-<script setup>
-// Fonction utilitaire pour les classes d'input (réutilisée dans le template)
-function fieldClass(error) {
-    return [
-        "w-full rounded-xl border px-4 py-2.5 text-[12.5px] outline-none transition-all",
-        "bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400",
-        error
-            ? "border-red-400 focus:ring-2 focus:ring-red-400/20"
-            : "border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600/30",
-    ];
-}
-</script>

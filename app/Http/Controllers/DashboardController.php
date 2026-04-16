@@ -6,19 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\{Expense, Project};
 use Inertia\Inertia;
 use Inertia\Response;
-use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    //
     public function index(Request $request): Response
     {
         $user = $request->user();
-
-        // ── Statistiques globales ──────────────────────────────
-
-        // Pour un chef de projet, n'afficher que ses projets
+        // ── Base query filtrée selon le rôle ──────────────────
+        // Admin        → tous les projets
+        // Chef projet  → seulement ses projets (créés ou dont il est lead)
+        // Collaborateur → tous (lecture seule)
         $projectQuery = Project::query();
+
+
         if ($user->isChefProjet()) {
             $projectQuery->where(function ($q) use ($user) {
                 $q->where('created_by', $user->id)
@@ -26,76 +26,119 @@ class DashboardController extends Controller
             });
         }
 
-        $stats = [
-            'active_projects'    => (clone $projectQuery)->where('status', 'en_cours')->count(),
-            'paused_projects'    => (clone $projectQuery)->where('status', 'en_pause')->count(),
-            'total_budget'       => (clone $projectQuery)->sum('budget'),
-            'avg_margin'         => $this->calcAvgMargin(clone $projectQuery),
-            'expenses_this_month' => Expense::whereMonth('expense_date', now()->month)
-                ->whereYear('expense_date', now()->year)
-                ->sum('amount'),
-        ];
+        // ── Stats générales ────────────────────────────────────
+        $activeProjects  = (clone $projectQuery)->where('status', 'en_cours')->count();
+        $pausedProjects  = (clone $projectQuery)->where('status', 'en_pause')->count();
+        $terminedProjects = (clone $projectQuery)->where('status', 'termine')->count();
+        $totalProjects   = (clone $projectQuery)->count();
+        $totalBudget     = (clone $projectQuery)->sum('budget');
 
-        // ── Projets récents ──────────────────────────────────
+        // Dépenses du mois — filtrées sur le périmètre du user
+        $expenseQuery = Expense::whereMonth('expense_date', now()->month)
+            ->whereYear('expense_date', now()->year);
+
+        if ($user->isChefProjet()) {
+            // Restreindre aux projets du chef
+            $userProjectIds = (clone $projectQuery)->pluck('id');
+            $expenseQuery->whereIn('project_id', $userProjectIds);
+        }
+
+        $expensesThisMonth = (float) $expenseQuery->sum('amount');
+
+        // ── Marge moyenne (projets terminés) ──────────────────
+        $avgMargin = $this->calcAvgMargin(clone $projectQuery);
+
+        // ── Projets récents (5 derniers modifiés) ─────────────
         $recentProjects = (clone $projectQuery)
-            ->with('client')
+            ->with('client:id,name')
             ->withSum('expenses', 'amount')
-            ->latest()
+            ->latest('updated_at')
             ->take(5)
             ->get()
-            ->map(fn($p) => [
-                'id'                 => $p->id,
-                'name'               => $p->name,
-                'status'             => $p->status,
-                'budget'             => $p->budget,
-                'budget_used_percent' => $p->budget > 0
-                    ? round(($p->expenses_sum_amount / $p->budget) * 100, 1)
-                    : 0,
-                'client'             => ['name' => $p->client?->name],
-            ]);
+            ->map(function ($p) {
+                $totalExpenses    = (float) ($p->expenses_sum_amount ?? 0);
+                $budgetUsedPct    = $p->budget > 0
+                    ? round(($totalExpenses / $p->budget) * 100, 1)
+                    : 0;
 
-        // ── Dépenses récentes ────────────────────────────────
-        $recentExpenses = Expense::with(['category', 'project'])
-            ->latest('expense_date')
+                return [
+                    'id'                  => $p->id,
+                    'name'                => $p->name,
+                    'reference'           => $p->reference,
+                    'status'              => $p->status,
+                    'budget'              => (float) $p->budget,
+                    'total_expenses'      => $totalExpenses,
+                    'budget_used_percent' => $budgetUsedPct,
+                    'client'              => [
+                        'id'   => $p->client?->id,
+                        'name' => $p->client?->name ?? '—',
+                    ],
+                ];
+            });
+
+        // ── Dépenses récentes (6 dernières) ───────────────────
+        $recentExpensesQuery = Expense::with([
+            'category:id,name,color,icon',
+            'project:id,name',
+        ])->latest('expense_date');
+
+        // Chef de projet : uniquement ses projets
+        if ($user->isChefProjet()) {
+            $userProjectIds = $userProjectIds ?? (clone $projectQuery)->pluck('id');
+            $recentExpensesQuery->whereIn('project_id', $userProjectIds);
+        }
+
+        $recentExpenses = $recentExpensesQuery
             ->take(6)
             ->get()
             ->map(fn($e) => [
                 'id'          => $e->id,
                 'description' => $e->description,
-                'amount'      => $e->amount,
+                'amount'      => (float) $e->amount,
+                'expense_date' => $e->expense_date?->format('d/m/Y'),
                 'category'    => [
-                    'name'  => $e->category?->name,
-                    'color' => $e->category?->color,
-                    'icon'  => $e->category?->icon,
+                    'id'    => $e->category?->id,
+                    'name'  => $e->category?->name  ?? 'Divers',
+                    'color' => $e->category?->color  ?? '#6b7280',
+                    'icon'  => $e->category?->icon   ?? 'receipt',
                 ],
-                'project'     => ['name' => $e->project?->name],
+                'project'     => [
+                    'id'   => $e->project?->id,
+                    'name' => $e->project?->name ?? '—',
+                ],
             ]);
 
         return Inertia::render('Dashboard/Index', [
-            'stats'          => $stats,
+            'stats' => [
+                'total_projects'      => $totalProjects,
+                'active_projects'     => $activeProjects,
+                'paused_projects'     => $pausedProjects,
+                'terminated_projects' => $terminedProjects,
+                'total_budget'        => (float) $totalBudget,
+                'avg_margin'          => $avgMargin,
+                'expenses_this_month' => $expensesThisMonth,
+            ],
             'recentProjects' => $recentProjects,
             'recentExpenses' => $recentExpenses,
         ]);
     }
 
-    /**
-     * Calcule la marge moyenne sur les projets terminés
-     */
+    // ── Marge moyenne sur projets terminés ────────────────────
     private function calcAvgMargin($query): float
     {
         $projects = (clone $query)
             ->where('status', 'termine')
+            ->where('budget', '>', 0)        // exclure les budgets à 0
             ->withSum('expenses', 'amount')
             ->get();
 
-        if ($projects->isEmpty()) return 0;
+        if ($projects->isEmpty()) return 0.0;
 
-        $totalMargin = $projects->sum(
-            fn($p) =>
-            $p->budget > 0
-                ? (($p->budget - ($p->expenses_sum_amount ?? 0)) / $p->budget) * 100
-                : 0
-        );
+        $totalMargin = $projects->sum(function ($p) {
+            $spent  = (float) ($p->expenses_sum_amount ?? 0);
+            $budget = (float) $p->budget;
+            return (($budget - $spent) / $budget) * 100;
+        });
 
         return round($totalMargin / $projects->count(), 1);
     }

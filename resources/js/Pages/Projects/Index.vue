@@ -44,7 +44,7 @@
                     :class="[
                         'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all',
                         filters.status === f.value
-                            ? 'bg-emerald-400 dark:bg-emerald-100/30 text-white shadow-sm'
+                            ? 'bg-emerald-600 dark:bg-emerald-900/10 text-white shadow-sm'
                             : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200',
                     ]"
                 >

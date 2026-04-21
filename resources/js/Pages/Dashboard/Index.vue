@@ -354,7 +354,7 @@ function fmtShort(v) {
                     <div class="card-footer">
                         <Link
                             href="/projects"
-                            class="text-[11px] font-semibold text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center gap-1"
+                            class="text-[11px] font-semibold text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors flex items-center gap-1"
                         >
                             <span class="material-symbols-outlined text-[13px]"
                                 >grid_view</span

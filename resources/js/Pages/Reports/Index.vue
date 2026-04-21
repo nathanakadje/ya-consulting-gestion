@@ -81,8 +81,13 @@ function exportExcel() {
 const maxEvolution = computed(() =>
     Math.max(...props.evolution.map((m) => m.amount), 1),
 );
-function barH(amount) {
-    return Math.max((amount / maxEvolution.value) * 100, 3);
+// function barH(amount) {
+//     return Math.max((amount / maxEvolution.value) * 100, 3);
+// }
+function barH(amount, containerHeightPx = 92) {
+    if (!maxEvolution.value || maxEvolution.value <= 0) return 4;
+    const ratio = amount / maxEvolution.value;
+    return Math.max(Math.round(ratio * containerHeightPx), 4);
 }
 
 // ── Catégories : pourcentage ──────────────────────────────
@@ -477,114 +482,82 @@ function statusLabel(s) {
                 </div>
 
                 <!-- Graphique évolution 6 mois + catégories -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <!-- Évolution barres -->
-                    <div class="card p-5">
-                        <h5
-                            class="font-headline font-bold text-gray-900 dark:text-white text-[13px] mb-4"
+                <div
+                    class="card p-6 shadow-sm border-none bg-white/80 dark:bg-gray-800/80 backdrop-blur-md"
+                    style="border-radius: 20px"
+                >
+                    <h5
+                        class="font-sans font-semibold text-gray-500 dark:text-gray-400 text-[12px] tracking-wide mb-8 uppercase"
+                    >
+                        Évolution dépenses (6 mois)
+                    </h5>
+
+                    <div
+                        v-if="evolution.length"
+                        class="relative"
+                        style="height: 130px"
+                    >
+                        <div
+                            class="absolute inset-0 flex items-stretch gap-2 px-1"
                         >
-                            Évolution dépenses (6 mois)
-                        </h5>
-                        <div class="flex items-end gap-2 h-28">
                             <div
                                 v-for="(m, i) in evolution"
                                 :key="i"
-                                class="flex-1 flex flex-col items-center gap-1.5 group"
+                                class="flex-1 relative group"
                             >
                                 <div
-                                    class="w-full rounded-t-lg transition-all duration-500 relative cursor-default"
-                                    :class="
-                                        i === evolution.length - 1
-                                            ? 'bg-primary-600 dark:bg-primary-500'
-                                            : 'bg-primary-100 dark:bg-primary-900/30 group-hover:bg-primary-300 dark:group-hover:bg-primary-800'
-                                    "
+                                    class="absolute bottom-[24px] left-0 right-0 transition-all duration-500 ease-in-out border"
                                     :style="{
-                                        height: barH(m.amount) + '%',
-                                        minHeight: '5px',
+                                        height: barH(m.amount, 90) + 'px',
+                                        minHeight: '4px',
+                                        /* Seuls les coins supérieurs sont arrondis */
+                                        borderRadius: '8px 8px 0 0',
+                                        /* Utilisation de tes couleurs fournies (boucle sur 7 couleurs si besoin) */
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)',
+                                            'rgba(255, 205, 86, 0.2)',
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(54, 162, 235, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(201, 203, 207, 0.2)',
+                                        ][i % 7],
+                                        borderColor: [
+                                            'rgb(255, 99, 132)',
+                                            'rgb(255, 159, 64)',
+                                            'rgb(255, 205, 86)',
+                                            'rgb(75, 192, 192)',
+                                            'rgb(54, 162, 235)',
+                                            'rgb(153, 102, 255)',
+                                            'rgb(201, 203, 207)',
+                                        ][i % 7],
                                     }"
                                 >
-                                    <!-- Tooltip -->
                                     <div
-                                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-900 dark:bg-gray-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-white text-[10px] font-bold px-2 py-1 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 border border-gray-100 dark:border-gray-600"
+                                        style="border-radius: 8px"
                                     >
-                                        {{ fmtShort(m.amount) }} FCFA
-                                        <span
-                                            class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-700"
-                                        ></span>
+                                        {{ fmtShort(m.amount) }}
                                     </div>
                                 </div>
+
                                 <span
-                                    class="text-[9px] font-bold text-gray-400 uppercase"
-                                    >{{ m.month }}</span
+                                    class="absolute bottom-0 left-0 right-0 text-center text-[10px] font-medium text-gray-400 uppercase tracking-tighter"
                                 >
+                                    {{ m.month }}
+                                </span>
                             </div>
-                        </div>
-                        <div
-                            v-if="!evolution.length"
-                            class="h-28 flex items-center justify-center"
-                        >
-                            <p class="text-[11.5px] text-gray-400">
-                                Aucune donnée
-                            </p>
                         </div>
                     </div>
 
-                    <!-- Répartition catégories -->
-                    <div class="card p-5">
-                        <h5
-                            class="font-headline font-bold text-gray-900 dark:text-white text-[13px] mb-4"
-                        >
-                            Par catégorie
-                        </h5>
-                        <div class="space-y-3">
-                            <div
-                                v-for="cat in byCategory.slice(0, 5)"
-                                :key="cat.name"
-                                class="space-y-1"
-                            >
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        <div
-                                            class="w-[7px] h-[7px] rounded-full flex-shrink-0"
-                                            :style="{
-                                                backgroundColor: cat.color,
-                                            }"
-                                        ></div>
-                                        <span
-                                            class="text-[11.5px] text-gray-600 dark:text-gray-400 font-medium"
-                                        >
-                                            {{ cat.name }}
-                                        </span>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-[10px] text-gray-400"
-                                            >{{ catPct(cat.amount) }}%</span
-                                        >
-                                        <span
-                                            class="text-[11px] font-bold font-mono text-gray-900 dark:text-white"
-                                        >
-                                            {{ fmtShort(cat.amount) }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div
-                                    class="h-[4px] bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden"
-                                >
-                                    <div
-                                        class="h-full rounded-full transition-all duration-700"
-                                        :style="{
-                                            width: catPct(cat.amount) + '%',
-                                            backgroundColor: cat.color,
-                                        }"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="!byCategory.length" class="py-6 text-center">
-                            <p class="text-[11.5px] text-gray-400">
-                                Aucune dépense ce mois
-                            </p>
-                        </div>
+                    <div
+                        v-else
+                        class="flex items-center justify-center"
+                        style="height: 130px"
+                    >
+                        <p class="text-[12px] text-gray-400 italic font-light">
+                            En attente de données...
+                        </p>
                     </div>
                 </div>
 

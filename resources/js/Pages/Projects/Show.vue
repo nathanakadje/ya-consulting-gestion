@@ -313,43 +313,6 @@ function fmtS(v) {
 
                 <!-- Burn par mois -->
 
-                <div v-if="charts.by_month?.length" class="card p-5">
-                    <h4
-                        class="font-headline font-bold text-gray-900 dark:text-white text-[13px] mb-4"
-                    >
-                        Dépenses / mois
-                    </h4>
-                    <div class="flex items-end gap-1.5 h-24">
-                        <div
-                            v-for="m in charts.by_month"
-                            :key="m.month"
-                            class="flex-1 flex flex-col items-center gap-1 group cursor-default"
-                        >
-                            <div
-                                class="w-full rounded-t-lg transition-all duration-500 relative bg-primary-100 dark:bg-primary-900/30 group-hover:bg-primary-600 dark:group-hover:bg-primary-500"
-                                :style="{
-                                    height:
-                                        barH(m.amount, charts.by_month) + '%',
-                                    minHeight: '4px',
-                                }"
-                            >
-                                <div
-                                    class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-900 dark:bg-gray-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"
-                                >
-                                    {{ fmtS(m.amount) }} FCFA
-                                    <span
-                                        class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-700"
-                                    ></span>
-                                </div>
-                            </div>
-                            <span
-                                class="text-[9px] font-bold text-gray-400 uppercase"
-                                >{{ m.month }}</span
-                            >
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Par catégorie -->
                 <div v-if="charts.by_category?.length" class="card p-5">
                     <h4

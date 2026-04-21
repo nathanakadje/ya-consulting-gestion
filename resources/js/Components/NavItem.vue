@@ -15,7 +15,7 @@
         <!-- Barre active gauche -->
         <span
             v-if="isActive"
-            class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] bg-violet-600 dark:bg-violet-400 rounded-r-full"
+            class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] bg-amber-400 dark:bg-amber-400 rounded-r-full"
         ></span>
 
         <!-- Icône Material Symbols -->
@@ -24,7 +24,7 @@
             :class="[
                 collapsed ? 'text-[20px]' : 'text-[18px]',
                 isActive
-                    ? 'text-violet-600 dark:text-violet-400'
+                    ? 'text-primary-600 dark:text-primary-400'
                     : 'text-gray-400 dark:text-gray-600 group-hover:text-gray-600 dark:group-hover:text-gray-300',
             ]"
             :style="isActive ? 'font-variation-settings:\'FILL\' 1' : ''"

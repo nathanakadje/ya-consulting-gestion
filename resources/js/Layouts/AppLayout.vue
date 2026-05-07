@@ -356,14 +356,14 @@ const navItems = computed(() => page.props.auth.user?.nav ?? []);
                         </button>
 
                         <!-- Notifications -->
-                        <button class="topbar-btn relative">
+                        <!-- <button class="topbar-btn relative">
                             <span class="material-symbols-outlined text-[19px]"
                                 >notifications</span
                             >
                             <span
                                 class="absolute top-[7px] right-[7px] w-[5px] h-[5px] bg-red-500 rounded-full ring-[1.5px] ring-white dark:ring-[#111318]"
                             ></span>
-                        </button>
+                        </button> -->
 
                         <!-- Divider -->
                         <div

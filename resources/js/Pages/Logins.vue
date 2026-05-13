@@ -32,7 +32,7 @@ const submit = () => {
     form.transform((data) => ({
         ...data,
         remember: form.remember ? "on" : "",
-    })).post("/login", {
+    })).post("gestion/login", {
         // ← Remplacer route("login") par "/login"
         onFinish: () => form.reset("password"),
     });

@@ -19,13 +19,13 @@ export default defineConfig({
             },
         }),
     ],
-    server: {
-        host: "0.0.0.0",
-        hmr: {
-            host: "slain-malt-haste.ngrok-free.dev",
-            protocol: "wss", // Crucial : utilise les WebSockets sécurisés
-        },
+   // server: {
+     //   host: "0.0.0.0",
+       // hmr: {
+         //   host: "slain-malt-haste.ngrok-free.dev",
+           // protocol: "wss", // Crucial : utilise les WebSockets sécurisés
+        //},
         // Force l'utilisation du HTTPS pour les liens générés
-        https: false, // On laisse false ici car ngrok gère le certificat
-    },
+        //https: false, // On laisse false ici car ngrok gère le certificat
+    //},
 });

@@ -16,14 +16,24 @@ const form = useForm({
     remember: false,
 });
 
+
 const submit = () => {
-    form.transform((data) => ({
-        ...data,
-        remember: form.remember ? "on" : "",
-    })).post("/login", {
+    // Utilisez le nom de la route Laravel
+    form.post("/gestion/login", {
         onFinish: () => form.reset("password"),
+        onError: (errors) => {
+            console.log("Erreurs:", errors);
+        },
     });
 };
+//const submit = () => {
+    //form.transform((data) => ({
+      //  ...data,
+  //      remember: form.remember ? "on" : "",
+//    })).post("/gestion/login", {
+    //    onFinish: () => form.reset("password"),
+  //  });
+//};
 </script>
 
 <template>

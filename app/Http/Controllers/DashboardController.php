@@ -107,7 +107,7 @@ class DashboardController extends Controller
                     'name' => $e->project?->name ?? '—',
                 ],
             ]);
-
+        //rendu du tableau de bord
         return Inertia::render('Dashboard/Index', [
             'stats' => [
                 'total_projects'      => $totalProjects,

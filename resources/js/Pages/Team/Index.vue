@@ -29,7 +29,7 @@ const roles = {
 // ── Changement de rôle rapide ─────────────────────────────
 function updateRole(userId, newRole) {
     router.patch(
-        `/team/${userId}/role`,
+        `/gestion/team/${userId}/role`,
         { role: newRole },
         {
             preserveScroll: true,
@@ -47,7 +47,7 @@ function confirmDelete(member) {
 }
 
 function executeDelete() {
-    router.delete(`/team/${deleteModal.id}`, {
+    router.delete(`/gestion/team/${deleteModal.id}`, {
         onSuccess: () => {
             deleteModal.show = false;
         },
@@ -117,7 +117,7 @@ function initials(name) {
                     </h4>
                 </div>
                 <Link
-                    href="/team/create"
+                    href="/gestion/team/create"
                     class="flex items-center gap-1.5 px-3.5 py-2 bg-violet-600 hover:bg-violet-700 text-white text-[12px] font-semibold rounded-xl shadow-sm shadow-violet-600/20 transition-all active:scale-95"
                 >
                     <span class="material-symbols-outlined text-[16px]"
@@ -302,7 +302,7 @@ function initials(name) {
                                     class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                 >
                                     <Link
-                                        :href="`/team/${member.id}/edit`"
+                                        :href="`/gestion/team/${member.id}/edit`"
                                         class="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-600/10 transition-all"
                                         title="Modifier"
                                     >

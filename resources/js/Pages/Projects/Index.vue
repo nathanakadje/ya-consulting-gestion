@@ -245,7 +245,7 @@
                                     class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                 >
                                     <Link
-                                        :href="`/projects/${project.id}/edit`"
+                                        :href="`/gestion/projects/${project.id}/edit`"
                                         v-if="
                                             $page.props.auth.user?.can
                                                 ?.manage_projects
@@ -464,7 +464,7 @@ function applyFilters() {
 
 // ── Navigation vers détail ────────────────────────────────────
 function navigateTo(id) {
-    router.visit(`/projects/${id}`);
+    router.visit(`/gestion/projects/${id}`);
 }
 
 // ── Couleur barre progression ─────────────────────────────────
@@ -491,7 +491,7 @@ function confirmDelete(project) {
 }
 
 function executeDelete() {
-    router.delete(`/projects/${deleteModal.projectId}`, {
+    router.delete(`/gestion/projects/${deleteModal.projectId}`, {
         onSuccess: () => {
             deleteModal.show = false;
         },

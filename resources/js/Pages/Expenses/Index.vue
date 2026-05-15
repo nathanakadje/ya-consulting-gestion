@@ -246,7 +246,7 @@
                             </td>
                             <td class="px-5 py-3.5">
                                 <Link
-                                    :href="`/projects/${expense.project?.id}`"
+                                    :href="`/gestion/projects/${expense.project?.id}`"
                                     class="text-xs font-semibold text-gray-400 dark:text-gray-400 hover:underline"
                                 >
                                     {{ expense.project?.name }}
@@ -294,7 +294,7 @@
                                 >
                                     <a
                                         v-if="expense.receipt_path"
-                                        :href="`/expenses/${expense.id}/receipt`"
+                                        :href="`/gestion/expenses/${expense.id}/receipt`"
                                         target="_blank"
                                         class="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
                                         title="Justificatif"
@@ -456,7 +456,7 @@ const localFilters = reactive({
 
 function applyFilters() {
     router.get(
-        "/expenses",
+        "/gestion/expenses",
         {
             search: localFilters.search || undefined,
             project_id: localFilters.project_id || undefined,
@@ -524,7 +524,7 @@ function confirmDelete(expense) {
 }
 
 function executeDelete() {
-    router.delete(`/expenses/${deleteModal.id}`, {
+    router.delete(`/gestion/expenses/${deleteModal.id}`, {
         preserveScroll: true,
         onSuccess: () => {
             deleteModal.show = false;

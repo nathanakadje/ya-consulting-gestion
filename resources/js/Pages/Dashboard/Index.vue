@@ -339,7 +339,7 @@ function fmtShort(v) {
                             </p>
                             <Link
                                 v-if="user?.can?.manage_projects"
-                                href="/projects/create"
+                                href="/gestion/projects/create"
                                 class="text-[11.5px] text-primary-600 dark:text-primary-400 font-semibold hover:underline flex items-center gap-1"
                             >
                                 <span
@@ -353,7 +353,7 @@ function fmtShort(v) {
 
                     <div class="card-footer">
                         <Link
-                            href="/projects"
+                            href="/gestion/projects"
                             class="text-[11px] font-semibold text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors flex items-center gap-1"
                         >
                             <span class="material-symbols-outlined text-[13px]"

@@ -23,7 +23,7 @@ const localFilters = reactive({
 
 function applyFilters() {
     router.get(
-        "/reports",
+        "/gestion/reports",
         {
             month: localFilters.month,
             project_id: localFilters.project_id || undefined,
@@ -63,7 +63,7 @@ function exportPdf() {
         ...(localFilters.project_id && { project_id: localFilters.project_id }),
     });
     // Téléchargement direct (pas Inertia — on veut un fichier)
-    window.location.href = `/reports/export-pdf?${params}`;
+    window.location.href = `/gestion/reports/export-pdf?${params}`;
     setTimeout(() => (exporting.pdf = false), 3000);
 }
 
@@ -73,7 +73,7 @@ function exportExcel() {
         month: localFilters.month,
         ...(localFilters.project_id && { project_id: localFilters.project_id }),
     });
-    window.location.href = `/reports/export-excel?${params}`;
+    window.location.href = `/gestion/reports/export-excel?${params}`;
     setTimeout(() => (exporting.excel = false), 3000);
 }
 
@@ -633,7 +633,7 @@ function statusLabel(s) {
                                     </td>
                                     <td class="px-5 py-3">
                                         <Link
-                                            :href="`/projects/${tx.project?.id ?? '#'}`"
+                                            :href="`/gestion/projects/${tx.project?.id ?? '#'}`"
                                             class="font-semibold text-gray-700 dark:text-gray-300 hover:text-primary-600 transition-colors"
                                         >
                                             {{ tx.project?.name ?? "—" }}

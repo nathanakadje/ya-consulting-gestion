@@ -4,8 +4,14 @@
     </IfModule>
 
     RewriteEngine On
-   
-    # Handle Authorization Header
+
+    RewriteBase /gestion/
+
+    #RewriteCond %{REQUEST_FILENAME} !-f
+    #RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteRule . /gestion/index.php [L]   
+    
+ # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
@@ -21,10 +27,9 @@
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+#RewriteRule ^index\.php$ - [L]    
+
+#RewriteRule . /gestion/index.php [L]
+RewriteRule ^ index.php [L]
 </IfModule>
 
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /gestion/
-</IfModule>

@@ -49,7 +49,7 @@ const quickActions = computed(() => {
 
     if (user.value?.can?.manage_projects) {
         actions.push({
-            href: "/projects/create",
+            href: "/gestion/projects/create",
             icon: "add_circle",
             label: "Nouveau projet",
             cls: "bg-primary-600 hover:bg-primary-700 text-white shadow-sm shadow-primary-600/20",
@@ -85,9 +85,9 @@ const quickActions = computed(() => {
     }
 
     // Toujours ajouter la liste projets si pas encore là
-    if (!actions.find((a) => a.href === "/projects")) {
+    if (!actions.find((a) => a.href === "/gestion/projects")) {
         actions.splice(1, 0, {
-            href: "/projects",
+            href: "/gestion/projects",
             icon: "account_tree",
             label: "Projets",
             cls: "bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]",
@@ -145,7 +145,7 @@ function fmtShort(v) {
 
             <Link
                 v-if="user?.can?.manage_projects"
-                href="/projects/create"
+                href="/gestion/projects/create"
                 class="hidden sm:flex items-center gap-1.5 px-3.5 py-2 flex-shrink-0 bg-primary-600 hover:bg-primary-700 text-white text-[12px] font-semibold rounded-xl shadow-sm shadow-primary-600/20 transition-all active:scale-95"
             >
                 <span class="material-symbols-outlined text-[16px]">add</span>
@@ -227,7 +227,7 @@ function fmtShort(v) {
                                 </p>
                             </div>
                         </div>
-                        <Link href="/projects" class="see-all-link">
+                        <Link href="/gestion/projects" class="see-all-link">
                             Voir tous
                             <span class="material-symbols-outlined text-[13px]"
                                 >arrow_forward</span
@@ -241,7 +241,7 @@ function fmtShort(v) {
                         <Link
                             v-for="project in recentProjects"
                             :key="project.id"
-                            :href="`/projects/${project.id}`"
+                            :href="`/gestion/projects/${project.id}`"
                             class="flex items-center gap-3.5 px-5 py-3.5 hover:bg-gray-50/70 dark:hover:bg-white/[0.02] transition-colors group"
                         >
                             <div

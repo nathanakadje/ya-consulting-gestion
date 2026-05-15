@@ -32,9 +32,9 @@ const form = useForm({
 
 function submit() {
     if (isEditing.value) {
-        form.put(`/projects/${props.project.id}`);
+        form.put(`/gestion/projects/${props.project.id}`);
     } else {
-        form.post("/projects");
+        form.post("/gestion/projects/");
     }
 }
 
@@ -160,7 +160,7 @@ const selectedClient = computed(
             <!-- En-tête -->
             <div class="flex items-center gap-3 mb-8">
                 <Link
-                    href="/projects"
+		href="/gestion/projects"
                     class="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all flex-shrink-0"
                 >
                     <span class="material-symbols-outlined text-[20px]"
@@ -778,7 +778,7 @@ const selectedClient = computed(
                             Retour
                         </button>
                         <div class="flex items-center gap-3">
-                            <Link href="/projects" class="btn-prev"
+                            <Link href="/gestion/projects" class="btn-prev"
                                 >Annuler</Link
                             >
                             <button

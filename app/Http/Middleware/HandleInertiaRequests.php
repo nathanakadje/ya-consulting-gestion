@@ -101,11 +101,14 @@ class HandleInertiaRequests extends Middleware
     private function navForRole(string $role): array
     {
         $all = [
-            ['label' => 'Dashboard', 'icon' => 'dashboard',    'route' => '/dashboard', 'exact' => true],
-            ['label' => 'Projets',   'icon' => 'account_tree', 'route' => '/projects'],
-            ['label' => 'Dépenses',  'icon' => 'receipt_long', 'route' => '/expenses'],
-            ['label' => 'Rapports',  'icon' => 'bar_chart',    'route' => '/reports',   'roles' => ['admin', 'project_manager']],
-            ['label' => 'Équipe',    'icon' => 'groups',        'route' => '/team',      'roles' => ['admin']],
+            ['label' => 'Dashboard', 'icon' => 'dashboard',    'route' => '/gestion/dashboard', 
+'exact' => true],
+            ['label' => 'Projets',   'icon' => 'account_tree', 'route' => '/gestion/projects'],
+            ['label' => 'Dépenses',  'icon' => 'receipt_long', 'route' => '/gestion/expenses'],
+            ['label' => 'Rapports',  'icon' => 'bar_chart',    'route' => '/gestion/reports',   
+'roles' => ['admin', 'project_manager']],
+            ['label' => 'Équipe',    'icon' => 'groups',        'route' => '/gestion/team',      
+'roles' => ['admin']],
         ];
 
         return array_values(array_filter($all, function ($item) use ($role) {

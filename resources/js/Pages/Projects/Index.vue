@@ -71,7 +71,7 @@
                 <!-- Bouton Nouveau projet -->
                 <Link
                     v-if="$page.props.auth.user?.can?.manage_projects"
-                    href="/projects/create"
+                    href="/gestion/projects/create"
                     class="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-sm shadow-primary-600/25 transition-all active:scale-95 whitespace-nowrap"
                 >
                     <span class="material-symbols-outlined text-[18px]"
@@ -287,7 +287,7 @@
                                     Aucun projet trouvé
                                 </p>
                                 <Link
-                                    href="/projects/create"
+                                    href="/gestion/projects/create"
                                     class="inline-flex items-center gap-1 mt-3 text-primary-600 text-sm font-semibold hover:underline"
                                 >
                                     <span
@@ -448,7 +448,7 @@ function applyFilters() {
     // router.get re-charge la page avec les nouveaux query params
     // preserveState: true conserve le scroll et l'état local
     router.get(
-        "/projects",
+        "/gestion/projects",
         {
             status: filters.status || undefined,
             client_id: filters.client_id || undefined,

@@ -21,7 +21,7 @@ const canManage = computed(() => page.props.auth.user?.can?.manage_projects);
 
 function changeStatus(val) {
     router.patch(
-        `/projects/${props.project.id}/status`,
+        `/gestion/projects/${props.project.id}/status`,
         { status: val },
         { preserveScroll: true },
     );
@@ -89,7 +89,7 @@ function fmtS(v) {
         <div class="flex flex-wrap items-start justify-between gap-4 mb-7">
             <div class="flex items-start gap-3 min-w-0">
                 <Link
-                    href="/projects"
+                    href="/gestion/projects"
                     class="w-9 h-9 mt-0.5 flex items-center justify-center rounded-xl flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
                 >
                     <span class="material-symbols-outlined text-[20px]"
@@ -182,7 +182,7 @@ function fmtS(v) {
                 </div>
                 <Link
                     v-if="canManage"
-                    :href="`/projects/${project.id}/edit`"
+                    :href="`/gestion/projects/${project.id}/edit`"
                     class="flex items-center gap-1.5 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-[12.5px] font-semibold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
                 >
                     <span class="material-symbols-outlined text-[17px]"

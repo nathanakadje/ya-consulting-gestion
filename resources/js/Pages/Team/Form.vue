@@ -31,9 +31,9 @@ const form = useForm({
 
 function submit() {
     if (isEditing.value) {
-        form.put(`/team/${props.member.id}`);
+        form.put(`/gestion/team/${props.member.id}`);
     } else {
-        form.post("/team");
+        form.post("/gestion/team");
     }
 }
 
@@ -79,7 +79,7 @@ const roles = [
             <!-- Retour -->
             <div class="flex items-center gap-3 mb-7">
                 <Link
-                    href="/team"
+                    href="/gestion/team"
                     class="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
                 >
                     <span class="material-symbols-outlined">arrow_back</span>
@@ -245,7 +245,7 @@ const roles = [
                 <!-- Actions -->
                 <div class="flex items-center justify-between pt-1">
                     <Link
-                        href="/team"
+                        href="/gestion/team"
                         class="px-5 py-2.5 text-[12.5px] font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
                     >
                         Annuler

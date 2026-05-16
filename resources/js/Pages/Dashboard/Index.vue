@@ -58,7 +58,7 @@ const quickActions = computed(() => {
     }
     if (user.value?.can?.create_expense) {
         actions.push({
-            href: "/expenses",
+            href: "/gestion/expenses",
             icon: "receipt_long",
             label: "Dépenses",
             cls: "bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]",
@@ -67,7 +67,7 @@ const quickActions = computed(() => {
     }
     if (user.value?.can?.view_reports) {
         actions.push({
-            href: "/reports",
+            href: "/gestion/reports",
             icon: "bar_chart",
             label: "Rapports",
             cls: "bg-white dark:bg-[#111318] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800/70 hover:bg-gray-50 dark:hover:bg-white/[0.04]",
@@ -385,7 +385,7 @@ function fmtShort(v) {
                             </div>
                             <h4 class="card-title">Dernières dépenses</h4>
                         </div>
-                        <Link href="/expenses" class="see-all-link"
+                        <Link href="/gestion/expenses" class="see-all-link"
                             >Voir tout</Link
                         >
                     </div>
@@ -550,7 +550,7 @@ function fmtShort(v) {
                         </p>
                         <Link
                             v-if="user?.can?.view_reports"
-                            href="/reports"
+                            href="/gestion/reports"
                             class="text-[11px] font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-0.5"
                         >
                             Rapports

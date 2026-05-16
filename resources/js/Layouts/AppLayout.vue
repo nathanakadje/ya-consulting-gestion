@@ -32,7 +32,7 @@ const pageBreadcrumb = computed(() => props.breadcrumb);
 //         ? "dark"
 //         : "light";
 //     router.patch(
-//         "/user/theme",
+//         "/gestion/user/theme",
 //         { theme: isDark.value ? "dark" : "light" },
 //         {
 //             preserveState: true,
@@ -84,7 +84,7 @@ function toggleTheme() {
 
     // Sauvegarder en base de données
     router.patch(
-        "/user/theme",
+        "/gestion/user/theme",
         { theme: newTheme ? "dark" : "light" },
         {
             preserveState: true,
@@ -117,7 +117,7 @@ function handleOutsideClick(e) {
 //     router.post(route("logout"));
 // }
 const logout = () => {
-    router.post("/logout");
+    router.post("/gestion/logout");
 };
 
 // ── Infos utilisateur ─────────────────────────────────────────

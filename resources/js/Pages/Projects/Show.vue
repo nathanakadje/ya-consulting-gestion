@@ -44,7 +44,7 @@ function confirmDel(e) {
     delModal.show = true;
 }
 function execDel() {
-    router.delete(`/expenses/${delModal.id}`, {
+    router.delete(`/gestion/expenses/${delModal.id}`, {
         preserveScroll: true,
         onSuccess: () => {
             delModal.show = false;
@@ -521,7 +521,7 @@ function fmtS(v) {
                                         >
                                             <a
                                                 v-if="expense.receipt_path"
-                                                :href="`/expenses/${expense.id}/receipt`"
+                                                :href="`/gestion/expenses/${expense.id}/receipt`"
                                                 target="_blank"
                                                 class="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
                                                 title="Justificatif"

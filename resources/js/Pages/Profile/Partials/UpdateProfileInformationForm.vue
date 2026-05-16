@@ -29,7 +29,7 @@ const updateProfileInformation = () => {
         form.photo = photoInput.value.files[0];
     }
 
-    form.post("/user/profile-information", {
+    form.post("/gestion/user/profile-information", {
         errorBag: "updateProfileInformation",
         preserveScroll: true,
         onSuccess: () => clearPhotoFileInput(),
